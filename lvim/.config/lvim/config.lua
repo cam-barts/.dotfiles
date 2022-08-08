@@ -23,9 +23,9 @@ lvim.plugins = {
 	{ "p00f/nvim-ts-rainbow" },
 	-- { "metakirby5/codi.vim", cmd = "Codi" },
 	{
-		"Pocco81/AutoSave.nvim",
+		"Pocco81/auto-save.nvim",
 		config = function()
-			require("autosave").setup()
+			require("autosave").setup({ dim = 0 })
 		end,
 	},
 	{
@@ -108,6 +108,9 @@ lvim.plugins = {
 			})
 		end,
 		ft = { "rust", "rs" },
+	},
+	{
+		"marcelofern/vale.nvim",
 	},
 }
 
