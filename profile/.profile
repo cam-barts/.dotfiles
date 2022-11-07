@@ -12,6 +12,6 @@ export BORG_PASSCOMMAND='secret-tool lookup service borg'
 export QT_STYLE_OVERRIDE=breeze
 export PYTHONPATH=.
 export PASTETIME=5
-
+export GTK_THEME="Sweet-Dark"
 
 . "$HOME/.cargo/env"

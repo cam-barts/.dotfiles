@@ -6,27 +6,30 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
 
 lvim.builtin.which_key.mappings["t"] = {
-	name = "+Trouble",
-	r = { "<cmd>Trouble lsp_references<cr>", "References" },
-	f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
-	d = { "<cmd>Trouble lsp_document_diagnostics<cr>", "Diagnostics" },
-	q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
-	l = { "<cmd>Trouble loclist<cr>", "LocationList" },
-	w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Diagnostics" },
+  name = "+Trouble",
+  r = { "<cmd>Trouble lsp_references<cr>", "References" },
+  f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
+  d = { "<cmd>Trouble lsp_document_diagnostics<cr>", "Diagnostics" },
+  q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
+  l = { "<cmd>Trouble loclist<cr>", "LocationList" },
+  w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "Diagnostics" },
+  t = { "<cmd>TroubleToggle<cr>", "Toggle" }
 }
 
 lvim.builtin.which_key.mappings["Q"] = { "<cmd>q!<CR>", "Quit" }
 lvim.builtin.which_key.mappings["q"] = { "<cmd>TodoTelescope<CR>", "To Do List" }
 lvim.builtin.which_key.mappings["y"] = {
-	name = "+Tasks",
-	a = { "<cmd>Telescope yabs tasks<CR>", "All Tasks" },
-	g = { "<cmd>Telescope yabs global_tasks<CR>", "Global Tasks" },
-	c = { "<cmd>Telescope yabs current_language_tasks<CR>", "Current Language Tasks" },
+  name = "+Tasks",
+  a = { "<cmd>Telescope yabs tasks<CR>", "All Tasks" },
+  g = { "<cmd>Telescope yabs global_tasks<CR>", "Global Tasks" },
+  c = { "<cmd>Telescope yabs current_language_tasks<CR>", "Current Language Tasks" },
 }
 lvim.builtin.which_key.mappings.b.p = { "<cmd>!pst %<CR>", "Send to Pastebin" }
 
 lvim.builtin.which_key.mappings["r"] = { "<cmd>lua require('rest-nvim').run()<CR>", "Run HTTP Under Cursor" }
 
+lvim.builtin.which_key.mappings["v"] = { "<cmd>ALEPopulateQuickfix<CR><cmd>cclose<CR><cmd>Trouble quickfix<CR>",
+  "Vale QuickFix List" }
 -- # unmap a default keymapping
 -- lvim.keys.normal_mode["<C-Up>"] = false
 
