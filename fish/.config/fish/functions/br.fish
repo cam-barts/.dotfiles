@@ -1,0 +1,1 @@
+/home/nux/.local/share/broot/launcher/fish/br.fish

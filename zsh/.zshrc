@@ -132,6 +132,8 @@ alias g="goto"
 # Replace some more things with better alternatives
 alias cat='bat'
 
+
+alias open='xdg-open'
 # Common use
 alias grubup="sudo update-grub"
 alias tarnow='tar -acf '
@@ -177,7 +179,7 @@ alias docker-cleanup='docker container prune -f && docker image prune -a'
 
 #Recent Installed Packages
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
-alias teams="teams --no-sandbox"
+# alias teams="teams --no-sandbox"
 ZSH_ALIAS_FINDER_AUTOMATIC=true
 alias alias-finder="alias-finder -l"
 
@@ -185,6 +187,10 @@ path+=("$HOME/.local/bin")
 path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
 
 alias Just="just --justfile ~/.user.justfile --working-directory ."
+alias idea="nvim '/home/nux/ObsVaults/Nux/00 Meta/✏Workbench.md'"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 eval "$(starship init zsh)"
+
+
+source /home/nux/.config/broot/launcher/bash/br

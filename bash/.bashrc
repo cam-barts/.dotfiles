@@ -48,3 +48,5 @@ eval "$(starship init bash)"
 [[ -s "/usr/local/share/goto.sh" ]] && source /usr/local/share/goto.sh
 
 . "$HOME/.cargo/env"
+
+source /home/nux/.config/broot/launcher/bash/br
