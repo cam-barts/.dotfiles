@@ -1,0 +1,80 @@
+# espanso match file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+# You can use this file to define the base matches (aka snippets)
+# that will be available in every application when using espanso.
+
+# Matches are substitution rules: when you type the "trigger" string
+# it gets replaced by the "replace" string.
+matches:
+  # Simple text replacement
+  - trigger: ";espanso"
+    replace: "Hi there!"
+
+  # NOTE: espanso uses YAML to define matches, so pay attention to the indentation!
+
+  # But matches can also be dynamic:
+
+  # Print the current date
+  - trigger: ";;date"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y-%m-%d"
+  - trigger: ";;epoch"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%s"
+  - trigger: ";;fulldate"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%+"
+  - trigger: ";;wttr"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: 'curl "wttr.in/?format=4"'
+  # Obsidian Linkage
+  - trigger: ";;obslink"
+    replace: "[[{{filename}}]]"
+    vars:
+      - name: files
+        type: shell
+        params:
+          cmd: "find ~/ObsVaults/Nux/ -type f -name '*.md' -not -path '*/00 Meta/*' -not -path '*/.trash/*' -not -path '*/.obsidian/*' -exec basename {} \\; | cut -d'.' -f 1"
+      - name: filename
+        type: choice
+        params:
+          values: "{{files}}"
+  - trigger: ";;zen"
+    replace: |
+      Beautiful is better than ugly.
+      Explicit is better than implicit.
+      Simple is better than complex.
+      Complex is better than complicated.
+      Flat is better than nested.
+      Sparse is better than dense.
+      Readability counts.
+      Special cases aren’t special enough to break the rules.
+      Although practicality beats purity.
+      Errors should never pass silently.
+      Unless explicitly silenced.
+      In the face of ambiguity, refuse the temptation to guess.
+      There should be one-- and preferably only one --obvious way to do it.
+      Although that way may not be obvious at first unless you’re Dutch.
+      Now is better than never.
+      Although never is often better than *right* now.
+      If the implementation is hard to explain, it’s a bad idea.
+      If the implementation is easy to explain, it may be a good idea.
+      Namespaces are one honking great idea -- let’s do more of those!

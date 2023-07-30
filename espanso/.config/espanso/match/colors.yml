@@ -1,0 +1,9 @@
+matches:
+  - triggers: [ ";;colors.magenta", ";;colors.red" ]
+    replace: "#FF0D8A"
+  - trigger: ";;colors.green"
+    replace: "#23D188"
+  - triggers: [ ";;colors.blue", ";;colors.cyan" ]
+    replace: "#28D8DB"
+  - triggers: [ ";;colors.violet", ";;colors.purple" ]
+    replace: "#5D4FBA"

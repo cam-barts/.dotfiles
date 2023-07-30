@@ -1,0 +1,52 @@
+matches:
+  - trigger: ";;req"
+    label: "Monitoring Request"
+    replace: "https://cfainstitute.atlassian.net/servicedesk/customer/portal/41/group/155/create/695"
+  - trigger: ";;req"
+    label: "General SRE Request"
+    replace: "https://cfainstitute.atlassian.net/servicedesk/customer/portal/41/group/155/create/693"
+  - trigger: ";;req"
+    label: "Drew Issue"
+    replace: "https://cfainstitute.atlassian.net/servicedesk/customer/portal/41/group/180/create/789"
+  - trigger: ";;req"
+    label: "Drew Access"
+    replace: "https://cfainstitute.atlassian.net/servicedesk/customer/portal/4/group/133/create/652"
+  - trigger: ";;req"
+    label: "Atlassian Tools Request"
+    replace: "https://cfainstitute.atlassian.net/servicedesk/customer/portal/4/group/133/create/558"
+  - trigger: ";;req"
+    label: "Change Request (Normal)"
+    replace: "https://cfainstitute.atlassian.net/servicedesk/customer/portal/4/group/114/create/443"
+  - trigger: ";;req"
+    label: "Change Request (Emergency)"
+    replace: "https://cfainstitute.atlassian.net/servicedesk/customer/portal/4/group/114/create/447"
+  - trigger: ";;req"
+    label: "Jira Admin Group"
+    replace: "https://cfainstitute.atlassian.net/servicedesk/customer/portal/4/group/113"
+
+  # Common Uses
+  - trigger: ";;infra"
+    replace: "/subscriptions/62d44f85-ab88-4465-9f30-5e95ba77a155/resourceGroups/azprdRGInfrastructure/providers/Microsoft.Insights/components/azprdInfrastructure"
+
+  # Sprint Info
+  - trigger: ";;sprint.now"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "echo \"ST-$(date +'%y')w$(date +'%W')\""
+  - trigger: ";;sprint.last"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "echo \"ST-$(date -d 'last week' +'%y')w$(date -d 'last week' +'%W')\""
+  - trigger: ";;sprint.next"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "echo \"ST-$(date -d 'next week' +'%y')w$(date -d 'next week' +'%W')\""
