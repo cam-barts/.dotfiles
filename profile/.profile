@@ -5,7 +5,7 @@ export XDG_STATE_HOME=$HOME/.local/state
 export XDG_CACHE_HOME=$HOME/.cache
 # ---
 export AZURE_CONFIG_DIR="$XDG_DATA_HOME"/azure
-export HISTFILE="${XDG_STATE_HOME}"/bash/history
+# export HISTFILE="${XDG_STATE_HOME}"/bash/history
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
@@ -44,5 +44,6 @@ export BORG_PASSCOMMAND='secret-tool lookup service borg'
 export PYTHONPATH=.
 export PASTETIME=5
 export GTK_THEME="sweet"
+PATH=$PATH:/opt/anaconda/bin/
 # export QT_QPA_PLATFORMTHEME=qt5ct
 . "$HOME/.local/share/cargo/env"

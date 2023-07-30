@@ -185,12 +185,27 @@ alias alias-finder="alias-finder -l"
 
 path+=("$HOME/.local/bin")
 path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
+path+=("$XDG_DATA_HOME/cargo/bin")
 
 alias Just="just --justfile ~/.user.justfile --working-directory ."
 alias idea="nvim '/home/nux/ObsVaults/Nux/00 Meta/✏Workbench.md'"
+alias history="history | cut -d' ' -f3- | uniq | fzf"
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 eval "$(starship init zsh)"
-
-
 source /home/nux/.config/broot/launcher/bash/br
+export HISTFILE="$XDG_STATE_HOME"/zsh/history
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/opt/anaconda/bin/conda' 'shell.zsh' 'hook' 2>&1 /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/opt/anaconda/etc/profile.d/conda.sh" ]; then
+        . "/opt/anaconda/etc/profile.d/conda.sh"
+    else
+        export PATH="/opt/anaconda/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+
