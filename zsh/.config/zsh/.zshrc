@@ -188,13 +188,37 @@ path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
 path+=("$XDG_DATA_HOME/cargo/bin")
 
 alias Just="just --justfile ~/.user.justfile --working-directory ."
+alias Mask="mask --maskfile ~/.config/maskfile.md"
 alias idea="nvim '/home/nux/ObsVaults/Nux/00 Meta/✏Workbench.md'"
-alias history="history | cut -d' ' -f3- | uniq | fzf"
+alias history="history keep -1 | tac | cut -d' ' -f3- | fzf"
+alias esconfig="nvim ~/.dotfiles/espanso/.config/espanso/match/"
+alias rm_pkg="paru -Qei | awk '/^Name/{name=\$3} /^Installed Size/{print \$4\$5, name}' | sort -h --reverse| fzf -m | cut -d' '  -f2 | xargs paru -Rns -"
+alias dust="br -w"
+alias grep="notify-send '# Try rg instead of grep'; grep"
+alias rg="notify-send '# Try rga instead of just rg, passing in -p anyway'; rg -p"
+
 
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 eval "$(starship init zsh)"
 source /home/nux/.config/broot/launcher/bash/br
 export HISTFILE="$XDG_STATE_HOME"/zsh/history
+
+
+rga-fzf() {
+	RG_PREFIX="rga --files-with-matches"
+	local file
+	file="$(
+		FZF_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
+			fzf --sort --preview="[[ ! -z {} ]] && rga --pretty --context 5 {q} {}" \
+				--phony -q "$1" \
+				--bind "change:reload:$RG_PREFIX {q}" \
+				--preview-window="70%:wrap"
+	)" &&
+	echo "opening $file" &&
+	xdg-open "$file"
+}
+
+
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/opt/anaconda/bin/conda' 'shell.zsh' 'hook' 2>&1 /dev/null)"

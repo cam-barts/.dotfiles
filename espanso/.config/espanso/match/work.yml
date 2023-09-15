@@ -50,3 +50,20 @@ matches:
         type: shell
         params:
           cmd: "echo \"ST-$(date -d 'next week' +'%y')w$(date -d 'next week' +'%W')\""
+  - trigger: ";;sso.pass"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "secret-tool lookup Title \"Work SSO\""
+  - trigger: ";;sso.code"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "secret-tool search Title \"Work SSO\" 2>&1 | grep \"TOTP\" | cut -d\" \" -f3"
+  - trigger: ";;oh"
+    replace: "https://tldr.cam/office-hours"
+

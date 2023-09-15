@@ -1,0 +1,9 @@
+matches:
+  - trigger: ";;doc.f"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: "/bin/cat $CONFIG/snips/fun_docstring"
+          debug: true

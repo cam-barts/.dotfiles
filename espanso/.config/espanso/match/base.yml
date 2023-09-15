@@ -49,14 +49,10 @@ matches:
   - trigger: ";;obslink"
     replace: "[[{{filename}}]]"
     vars:
-      - name: files
+      - name: filename
         type: shell
         params:
-          cmd: "find ~/ObsVaults/Nux/ -type f -name '*.md' -not -path '*/00 Meta/*' -not -path '*/.trash/*' -not -path '*/.obsidian/*' -exec basename {} \\; | cut -d'.' -f 1"
-      - name: filename
-        type: choice
-        params:
-          values: "{{files}}"
+          cmd: 'fd . --extension md --exclude "02 Vault Meta" --exclude "91 Slides Export" -x echo "{/.}" | sort | rofi -dmenu -p "Link Obsidian"'
   - trigger: ";;zen"
     replace: |
       Beautiful is better than ugly.
@@ -78,3 +74,11 @@ matches:
       If the implementation is hard to explain, it’s a bad idea.
       If the implementation is easy to explain, it may be a good idea.
       Namespaces are one honking great idea -- let’s do more of those!
+  - trigger: ";;e.w"
+    replace: "cam.barts@cfainstitute.org"
+  - trigger: ";;e.g"
+    replace: "CameronD.Barts@gmail.com"
+  - trigger: ";;e.c"
+    replace: "cam@coder.cam"
+  - trigger: ";;e.o"
+    replace: "cam.barts@outlook.com"
