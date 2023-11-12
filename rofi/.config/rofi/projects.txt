@@ -10,9 +10,11 @@
 /home/nux/git/home/cam-barts.github.io
 /home/nux/git/home/cam-portfolio
 /home/nux/git/home/CamsUrgencyFunction
+/home/nux/git/home/cloudflare_ip_updater_for_david
 /home/nux/git/home/codecrafters-redis-rust
 /home/nux/git/home/confluence-to-markdown
 /home/nux/git/home/edos-qtile
+/home/nux/git/home/github-readme
 /home/nux/git/home/healthchecks
 /home/nux/git/home/hello-yew
 /home/nux/git/home/jade_research/pytumblr
@@ -24,11 +26,14 @@
 /home/nux/git/home/learn_rust/my_fib
 /home/nux/git/home/megalinter/linters
 /home/nux/git/home/multimetric
+/home/nux/git/home/nicegui
 /home/nux/git/home/old.cam-barts.github.io
+/home/nux/git/home/openai_experimentation
 /home/nux/git/home/privateGPT
 /home/nux/git/home/pyobsidian/Nux
 /home/nux/git/home/pytest-synthetics
 /home/nux/git/home/qtile
+/home/nux/git/home/repo_metrics
 /home/nux/git/home/robot-synthetic-docker
 /home/nux/git/home/rofi
 /home/nux/git/home/snapd
@@ -37,6 +42,7 @@
 /home/nux/git/work/API.ApplicationManagement
 /home/nux/git/work/automatic-cloud-backup
 /home/nux/git/work/automatic-cloud-backup-upload
+/home/nux/git/work/azure_openai_apps
 /home/nux/git/work/azure-tagging-script
 /home/nux/git/work/cfa-python-synthetics
 /home/nux/git/work/cred-122/onit_file_validators
@@ -161,6 +167,7 @@
 /home/nux/git/work/work_repos/DevTools.CIPMIntegrationTest
 /home/nux/git/work/work_repos/DevTools.MembershipUsers
 /home/nux/git/work/work_repos/DevTools.ProductConfigurationScripts
+/home/nux/git/work/work_repos/enterprise-hub-management-ui
 /home/nux/git/work/work_repos/expressTemplate
 /home/nux/git/work/work_repos/Gateway.AzureB2C
 /home/nux/git/work/work_repos/Gateway.BigCommerce

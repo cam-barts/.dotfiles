@@ -43,3 +43,5 @@ matches:
     image_path: "$CONFIG/images/lovely.gif"
   - trigger: ";;send-it"
     image_path: "$CONFIG/images/send_it.gif"
+  - trigger: ";;works"
+    image_path: "$CONFIG/images/worksonmymachine.png"

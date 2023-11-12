@@ -1,8 +1,8 @@
 0-Mastery-INTRODUCTION
 10 Gotchas for Automation Code Reviews
-13
 151. Is It Okay to Be Average
 152. What’s the Worst Kind of Regret
+157. How Can You Get Closer to the People You Care About
 15 Cognitive Distortions to Blame for Your Negative Thinking
 192.168.29.106 Notes Sheet
 192.168.29.110 Notes Sheet
@@ -13,10 +13,22 @@
 1-Take Smart Notes-Writing is The Only Thing That Matters
 2022 Work Goals
 2023-06-01 DNS Ticket Reference For Monitoring Strategy
+2023-09-17-Dotfiles Repo
+2023-09-17-Espanso Snippets
+2023-09-17-Obsidian Setup
+2023-09-17-Open Source
+2023-09-17-Performance And Scaling Inventory
+2023-09-17-Security Vs Usability
+2023-09-17-Slow Data, No Data, Bad Data
+2023-09-17-SRE Training Plan
+2023-09-17-Time Respect - Why Meetings Suck
 2023-W32
 2023-W33
 2023-W36
 2023-W37
+2023-W38
+2023-W44
+2023-W45
 20 Hours Of Practice
 2-Mastery-SUBMIT TO REALITY THE IDEAL APPRENTICESHIP
 2-Take Smart Notes-Simplicity is Paramount
@@ -32,7 +44,6 @@
 5 Hinderances to Self Mastery
 5-Mastery-FUSE THE INTUITIVE WITH THE RATIONAL MASTERY
 5-Take Smart Notes-Separate and Interlocking Tasks
-6
 6-Take Smart Notes-Read For Understanding
 7 Negative Human Realities
 7-Take Smart Notes-Take Smart Notes
@@ -61,7 +72,8 @@ Advice is For Past Me
 Affected Service Jira Automation
 Aftab Ali
 Aftab Ali - Training Plan
-AI Tools Reference
+AI Partnerships
+AI References
 Alacritty
 Alert Enhancer Development
 All You Need Is Links
@@ -79,7 +91,7 @@ Antilibrary
 Antivirus Evasion
 A Person Without Boundaries Is Not a Person
 Appeal to Novelty
-Appeal To Probability Fallacy (Appeal To Possibility)
+Appeal To Probability Fallacy
 App Insights Connection Information
 Approval Email Template
 Argument from Fallacy
@@ -94,7 +106,6 @@ AutoRecon
 Availability Heuristic
 Avoid Suffering Battles that Might Not Occur
 Azure Common Alert Schema
-Baader-Meinhof Phenomenon
 Backfire Effect
 Back Office Groups
 Bandwagon Effect
@@ -112,6 +123,8 @@ Bike-Shedding
 Bitbucket Migration
 Bizarreness Effect
 Bloc Party (podcast)
++Blog
+Blog Posts DB View
 Bloons Appendix
 Books To Read
 Boredom
@@ -129,9 +142,13 @@ Bugwarrior
 Building a Second Brain
 Building Interpraters in Rust
 Building The Resume
+Callouts
 Campsite Rule
 Cam's Mac Recipe
 Canary Deployment Strategy
+Cancelled DREW Tasks for Lack of Ability to Test Before Production
+Canvas Contract
+Career Advice (2013)
 Cargo Cult Programming
 Catherine Lynch-Steadman
 CFA Brand Colors
@@ -142,6 +159,7 @@ CFA Passwords
 CFA Python App Build Checklist
 CFA Resume Sheet
 CFA Severity-Urgency Metric
+Chain of Events to Find Variable
 Change Management FY24 Request For Comments
 Change Management Risk Evaluation
 Change RGBA Colors in a Rofi File
@@ -181,6 +199,7 @@ Chapter 8 - Release Engineering
 Chapter 9 - Simplicity
 Charity Majors' Recipe for High-Performing Teams
 Chebyshev's Inequality
+Checkboxes
 Cheerleader Effect
 Circle Of Knowledge
 Clipster Desktop File
@@ -192,6 +211,7 @@ Cognative Biases
 Cognitive Distortion Fortune Telling — Cognitive Behavioral Therapy Los Angeles
 Colin Black
 Collections Dump For CFA
+Color Blocks
 Comaprison Chart - Pay and Benefits - Wolters vs CFA
 Commands I Ran For Lighthouse Reports
 Commands I Ran For Multimetrics Report
@@ -209,6 +229,7 @@ Context Effect
 Continued Influence Effect (Subset of Conservatism)
 Contrast Effect
 Control fallacies
+Corporate Culture Sucks
 Correlation Coeffiecient and Scaling
 Crazy God
 Create Deadlines where There Aren't Any
@@ -218,10 +239,12 @@ Creativity is Better than Comfort
 Crony Beliefs
 Cross-Race Effect (Cross-Race Bias, Other-Race Bias, Own-Race Bias)
 Crucible
+CSS References
 Cue-Dependent Forgetting
 Cumulative Sum Of Time Worked on Linked Tickets
 Curse of Knowledge
 Cyclic Growth
+Daft Punk Changelog Format
 Damage Types In Bloons
 Data Download With Kyle 8-22-2023
 Data Sync Process Monitoring
@@ -230,6 +253,7 @@ Dave Butler Exit Interview
 Dave Butler LinkedIn Recommendation
 David Egley
 Davids Church Idea
+Death by a Thousand Microservices
 Death to the double diamond
 Decision Matrix
 Declinism
@@ -241,13 +265,16 @@ Defensive Attribution Hypothesis
 Defining Christianity
 Definition of a Fool
 Delmore Effect
+DelmoreEffect
 Denomination Effect
 Designing the Mind
+Desktop File Entry
 Devin Walker
 Dev .NET Access Request
 Disposition Effect
 Distinction Bias
 Distraction Culture
+Document Your Python Code and Projects With ChatGPT
 Does Passion Come From Competency
 Don’t Make It Someone Else’s Problem
 Do You want To Be Rich or Do You Want To Be Wealthy (And Why The Difference Matters) (podcast)
@@ -260,6 +287,7 @@ Dunning-Kruger Effect
 Duration Neglect
 Eat the Frog
 Eat Your Own Dogfood
+Editing Wikipedia
 EFF Denounces Google's WEI Proposal
 Effective Criticism Requires Trust
 Effort Justification
@@ -284,6 +312,7 @@ Error Budgets Affect Change Process
 Error Budget Strategy
 Essentialism
 Event Scheduling is a Feature of Community
+Every App That Adds AI Looks Like This
 Example Chapter Reading Task
 Exam Results API 404 Error Investigation
 Experimenter's Bias
@@ -297,9 +326,11 @@ FastTrack SRE Support To Potential SWARMS
 Fatherly Advice To New Programmers
 Feature Flag Management System
 Feature Positive Effect
++Feeling
 Fish and Profile Config
 Flow is both a desirable and pleasurable state
 Focusing Effect
++Food Lion Grocery List
 Foxes Practice Stagecraft
 Framing Effect
 Franklin Virtues
@@ -322,10 +353,13 @@ Getting Started With Grafana
 Getting Things Done - Flow
 Gifts Vs Sacrifices
 GitHub Template Repo Creation
+GitPython Metrics Reports
 Git References
+Global Maskfile
 Go Fever
 Goodhart's Law
 Google Effect
+Google Has Sent Internet Into 'Spiral of Decline', Claims DeepMind Co-Founder
 Gordon Brander Patterns
 Grafana 9 Upgrade
 Grafana Cloud Update
@@ -343,12 +377,14 @@ Hacking Your Brain With Elaborate Coping Mechanisms
 Half-Baked Ideas
 Halo Effect (Horns and Halo effect)
 Hard-Easy Effect
+Hard-to-swallow truths they won't tell you about software engineer job
 Heat Metric
 Heaviness of the Body, Dullness of the Mind
 Hindsight Bias (Knew-It-All-Along Effect, Creeping Determinism)
 Hindsight Devalues Science
 Hip Hop Album Automation
 HomeLab Blog Post
+🏡Home Page
 Hot Hand Fallacy
 How Leadership (And Followers) Create Organizational Culture
 How Storytelling Makes You a Better Leader
@@ -391,7 +427,7 @@ I am fully forgiven and free from all shame and condemnation
 I am fully resourced to do everything God has called me to do
 I am increasing in influence and favor the kingdom of God
 I am protected from all harm and evil in Jesus’ name
-Icons For _fileClass
+Icons Reference
 Ideas That Changed My Life
 Identifiable Victim Effect
 If It Isn't Documented, It Doesn't Exist
@@ -443,6 +479,7 @@ Jeff Bezos Narrative Memo Requirement
 Jenny Egley
 Jesus and The Helper
 Jira Filter to See What Comes in as an Email
++Jira Issue
 Jira Schema
 Johnny Decimal Confluence Space
 Just Gonna Send It
@@ -456,10 +493,12 @@ Kenneth Stefan Investigation Notes
 Kenneth Williams
 Kenneth Williams - Training Plan
 Kerberos Authentication
+Khunian Paradigm Shift
 KQL For Percentage of Requests
 Kubernetes Team Training Challenge
 Kubernetes Tutorial for Beginners
 Kyle Carmitchel
+Kyle Recommendation Message Outline
 Lab Environment
 Ladder Of Inference
 LangChain Ideas
@@ -478,6 +517,7 @@ Levels of Processing Effect
 Levels Of Proficiency
 Lexi Dowdy
 Lies We Tell Ourselves to Keep Using Golang
+Linear Code Is More Readable
 Linking Your Thinking
 List Length Effect
 Locus of Control
@@ -485,6 +525,7 @@ Logic Fault For CFA Domain Down P1 2023-07-20
 London System
 Loss Aversion
 Lost in Translation
+Loyal Workers Are Selectively and Ironically Targeted for Exploitation
 Mac Recipe Ideas
 Magic Number 7 + 2 (Miller's Law)
 Mailspring Config
@@ -576,10 +617,12 @@ Monitoring Distributed Systems
 Monitoring Strategy Friction
 Monitoring Strategy Prod Deployment Scratchpad
 Mood-Congruent Memory Bias
-Moral Credential Effect
+Moral Credential
+MoralCredentialing_McKenna
 Moral Luck
 Moving Beyond Your Comfort Zone A Path to Personal Growth
 Moving from Novice to Expertise and Its Implications for Instruction
+Murphy's Laws Of Combat
 Music Theory
 My Aircraft
 My Comprehensive Obsidian Workflow For Zettelkasten and Evergreen Notes
@@ -593,13 +636,14 @@ Negativity Bias
 Neglect of Probability
 Nettiquette Guidelines
 Never Waste a Midlife Crisis
++New
 Next-In-Line Effect
-NiceGui.todo
 Noise is the Opposite of Improvisation
 No One is A Villain In Their Own Context
 No One is Crazy Financially
 Normalcy Bias
 Notes For Stefan's Resume
+Notes on CI-CD Project Meeting
 Notica Syntax from Python instead of Curl
 Not Invented Here
 Observer-Expectancy Effect
@@ -608,6 +652,7 @@ Obsidian - Open Daily Note
 Obsidian Plugins Review — 22
 Obsidian - Quick Add
 Obsidian - Quick Log
+Obsidian Redirect Host for Advanced URIs
 Obsidian To Professional Report
 Occam's Razor
 Octopus URLs
@@ -615,14 +660,18 @@ Odysseus and the Sirens
 Offboarding Automation (Support Ticket)
 Offboarding Reference Notes
 Omission Bias
+On AutoGPT
 Oncall An Equal-Opportunity Waste of Time
 One Downing
 One repays a teacher badly if one remains only a pupil
+On Racial Diversity and Group Decision Making Identifying Multiple Effects of Racial Composition on Jury Deliberations
+Open Source Does Not Win by Being Cheaper
 Open Source Monitoring
 OpenTelemetry in 2023
 OpsGenie Changes
 OpsGenie Follow alerts to Incident
 Optimism Bias
+Organization probably doesn't want to improve things
 OSCP Exam Guide Notes
 OSCP Objectives
 Ostrich Effect
@@ -644,8 +693,12 @@ Pattern Match for Link in description
 Peak-End Rule
 Peltzman Effect
 Penumbra Colors
+Permissions List
++Person
+Personal Tweaks
 Pessimism Bias
 Pessimism Only Sounds Smarter Than Optimism
+Pets vs. Cattle
 Philosophy A Diseased Discipline
 Philosophy Masterclass
 Picassos Blue Period
@@ -664,25 +717,28 @@ Postmortem Culture
 Postmortem Culture Learning From Failure
 Postmortem Process Changes Presentation
 Post-Purchase Rationalization (Choice-Supportive Bias)
+Pournelle's Iron Law of Bureaucracy
 Power Automate
 Power BI Calendar Reference
 Power BI Issues Query
+Practical Alerting from Time-Series Data
 Practice Over Time Can't Fail to Produce Results
 Practice Swarm with Kenneth Apr-11-2023
-Prayer Requests
 Prayer Requests
 Prejudice
 Premeditatio Malorum
 Preparedness paradox
 Primacy Effect
+Privilege
 Processing Difficulty Effect
 Prod Databases
 Production Support Work Items
 Product to Service Matching Effort
 Programming Algorithms
 Pro-Innovation Bias
-Project DB View
++Project
 Projection Bias
+Projects DB View
 (Proposal) How We Work As Service Transition
 Proposed Insight Schema
 Pros and Cons of Netsuite Transition
@@ -699,17 +755,21 @@ RAIN method
 Ralph Holmes
 Reactance
 Reactive Devaluation
-Readwise DB View
+Readwise DB View (Dataview)
 Real Developers Ship
 Recency Effect
 Recency Illusion
 Reddit Interview
 Refusing to Teach Kids Math Will Not Improve Equity
 Relationships Require Friction To Feel Real
+Release Engineering
 Release Management Move to Jira
 Remote Work Is Here to Stay. Employers Need to Accept That.
+Replicate Alfred Workflow In Rofi
 Researchers Say Microsoft Edge’s Telemetry Has the Worst Privacy of Any Major Browser
+Response To Architecture Team About CI Practices
 Response To Devin and Kapre
+Response To Kyle For Rating Issue
 Response To Ralph's DREW Hesitations
 Restraint Bias
 Resume
@@ -722,12 +782,12 @@ Riskonnect
 Risky Business How Audience Capture Can Sabotage Your Presentation
 Robot Synthetics Architectural Changes
 Robot Synthetics DB Setup
-Rofi
 Rosy Retrospection
 RSnapshot
 Salesforce Get Records for Users
 Salesforce User Creation Json
 Sankey Queries
+Sapir-Whorf Hypothesis
 Scaling And Performance SLI Inventory
 Screwed-O-Meter
 Second External Brain
@@ -746,7 +806,10 @@ Serhii Bilovol - Training Plan
 Serial-Position Effect (Serial Recall Effect)
 Service Inventory Goals
 Service Level Objectives
+Services in AWS
+Services in AWS 1
 Services To Host
+Simplicity
 Simplicity Is Not Shallowness
 Site Reliability Engineering 3-5 Year Plan
 Site Reliability Goals for CFA Institute
@@ -757,6 +820,7 @@ SLI Inventory Example Output Document-Outline
 Snowflake AI
 Social Comparison Bias
 Social Desirability Bias
+Software End Of Life Date
 Software To Use
 Sorted Dump For CFA
 So you want to learn physics (2021)
@@ -764,17 +828,20 @@ Spaced Repetition
 Spacing Effect
 Speed Matters
 Spice Blends
+Spontaneous Mentalizing Predicts the Fundamental Attribution Error
 Spotlight Effect
 spwd.db strings
 SQL Statements for Task Attachments in MOAD
+SRE
 SRE Book TOC Information
-SRE Engagement Model For Dev Team
+SRE Engagement Model For Dev Team At CFA Institute
 SRE Interview Questions
 SRE Interview Questions - David Sorensen
 SRE Interview Questions - Kenneth Williams
 SRE - Jira Epics
 SRE On Call Responsibilities
 SRE SWARM Duties, Authorities, And Overrides
+SSH References
 ST-1495 Service Level Objectives Overview
 ST-1761 DREW Branching Strategy Integration
 ST-1807 Monitoring Strategy TAG predocumentation
@@ -843,12 +910,13 @@ That cannot happen to me
 The 4 things you need to be an expert - Veritasium
 The Apologist and the Revolutionary
 The Art of Thinking Clearly by Rolf Dobelli
+The Beauty of Finished Software
 The Biggest Myth in Education
 The Cataclysm Sentence
 The Design of Everyday Things
-The Difference Between Living and Surviving
 The Double Diamond Model What Is It and Should You Use It
 The elite's war on remote work has nothing to do with productivity
+The Evolution of Automation at Google
 The Fellowship of the Tree Rings
 The Grand Unified Theory of Documentation
 The Hidden Pleasures of Learning For its Own Sake (podcast)
@@ -861,7 +929,9 @@ The Politically Incorrect Jesus
 The Principle of Least Power
 There is nothing new under the sun
 The Science of ‘Inside Out’
+The Science of Muddling Through
 The Screwtape Letters
+The slow death of authenticity in an attention economy
 The Sysadmin Approach to Service Management
 The Things You Own…Can’t Own You
 The Toyota Way
@@ -869,7 +939,7 @@ The Wubi Effect
 The XY Problem
 The Year of Growth
 The Zen Of Python
-Things To Do On Vacation
+Thinking About Thinking
 Third-Person Effect
 Third Person View of Yourself
 This Is Greatness
@@ -880,6 +950,7 @@ Tickets For Credentialling
 Time-Saving Bias
 Tip of the Tongue Phenomenon
 To become a Master, you must feel a profound connection to the field
+Tom Wallace
 Tool Licensing
 Toxicity
 Tragedy Of The Commons
@@ -909,18 +980,22 @@ Trait Ascription Bias
 Trust the Prep List
 Trying to plan for the future without a sense of history is like trying to plant cut flowers
 Ultimate Attribution Error
-Uncreated Notes
+Unbundling AI
+🚫Uncreated Notes
 Unit Bias
 Unix Philosophy
 Unshared Knowledge is Worthless
+Updating Board Of Governors Dashboard Metrics
 Updating Obsidian Workflow
 Use of Technology in Correctional Education
 User For Work Machine
 Use the bible as a mirror instead of binoculars
+VA Phone Number
 🧹Vault Cleanup
 Venus Rabies
 Von Restorff Effect (Isolation Effect)
 w22 Sprint Planning Notes
+Wallpapers
 Want Employees to Return to the Office Then Give Each One an Office
 Waterline Concept
 We are all  walking each other home
@@ -929,15 +1004,17 @@ Weber-Fechner Law
 Webhook Generation Reference
 We Cannot Cater to This
 We Don’t Read Poetry. Understand Why and You Understand Everything Wrong With Us as a Society.
-Weekly Note Ideas
++Weekly
 Welcome to LessWrong!
 Well-Traveled Road Effect
+Weviate Queries
 What Can We Do to Stop Polarization
 What Is the Tenth Man Rule
 What's the Zen of Python
 What Trying Something Gives You is Intuition
 Which Citation to Use
 Why DRY is the most over-rated programming principle  Thoughts on Software
+Why I Hate Wikipedia
 Why Spock is Not Rational
 Why The Left Had to Steal the Right's Dark Money Playbook (podcast)
 Why Your Meetings Stink and What to Do About It
@@ -947,8 +1024,8 @@ Wikipedia Fix Copied Links
 Windows sucks
 Wisdom of Crowds
 Wolters Kluwer Interview
+Women In Computer Science
 ✏Workbench
-workbench.bookmark
 Work Right Ship Fast
 Write about what you learn. It pushes you to understand topics better
 Writing Excellent Documentation
@@ -957,6 +1034,7 @@ Writing is the Crucible for Knowledge
 Writing is the Product of Knowledge
 Writing Tools
 xdg-ninja output
+YAML Reference
 You Are Not Google
 You Know You’ve Made This Mistake
 You Must Read to Lead

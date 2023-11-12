@@ -1,30 +1,15 @@
-# If you come from bash you might have to change your $PATH.
+# If zsh is acting up, load this and the one at the bottom
+# zmodload zsh/zprof
+
+#If If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
 
 # Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
+zstyle ':omz:update' mode disabled  # disable automatic updates
 # zstyle ':omz:update' mode auto      # update automatically without asking
 # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
@@ -35,59 +20,40 @@ export ZSH="$HOME/.oh-my-zsh"
 # DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
+DISABLE_LS_COLORS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker docker-compose alias-finder zsh-autosuggestions)
+# plugins=(git docker docker-compose alias-finder zsh-autosuggestions)
 
+plugins=(zsh-autosuggestions)
 source $ZSH/oh-my-zsh.sh
 
-autoload -Uz compinit
-zstyle ':completion:*' menu select
-zmodload zsh/complist
-compinit
+source ~/.profile
+source ~/goto.sh
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /home/nux/.config/broot/launcher/bash/br
+
+# autoload -Uz compinit
+#
+# zstyle ':completion:*' menu select
+# zmodload zsh/complist
+# compinit
 
 autoload -Uz colors && colors
 
 # vi mode
 bindkey -v
 export KEYTIMEOUT=1
-
-source ~/.profile
-source ~/goto.sh
-
 
 
 # Change cursor shape for different vi modes.
@@ -155,7 +121,7 @@ alias hosts="hosts --auto-sudo"
 # alias cp="fcp"
 
 # Arch Common
-alias upd='sudo reflector --latest 5 --age 2 --fastest 5 --protocol https --sort rate --save /etc/pacman.d/mirrorlist && cat /etc/pacman.d/mirrorlist && sudo pacman -Syu  && sudo updatedb'
+alias upd='sudo reflector --latest 5 --age 2 --fastest 5 --protocol https --sort rate --save /etc/pacman.d/mirrorlist && cat /etc/pacman.d/mirrorlist && paru -Syyu'
 alias aup="pamac upgrade --aur"
 alias fixpacman="sudo rm /var/lib/pacman/db.lck"
 alias big="expac -H M '%m\t%n' | sort -h | nl"              # Sort installed packages according to size in MB (expac must be installed)
@@ -168,9 +134,6 @@ alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/p
 alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
 alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
 
-# Help people new to Arch
-alias apt='man pacman'
-alias apt-get='man pacman'
 alias paru="paru --bottomup"
 
 #Cleanup orphaned packages
@@ -179,7 +142,7 @@ alias docker-cleanup='docker container prune -f && docker image prune -a'
 
 #Recent Installed Packages
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
-# alias teams="teams --no-sandbox"
+
 ZSH_ALIAS_FINDER_AUTOMATIC=true
 alias alias-finder="alias-finder -l"
 
@@ -188,19 +151,26 @@ path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
 path+=("$XDG_DATA_HOME/cargo/bin")
 
 alias Just="just --justfile ~/.user.justfile --working-directory ."
-alias Mask="mask --maskfile ~/.config/maskfile.md"
+
+# alias Mask="mask --maskfile ~/.config/maskfile.md"
+function Mask() {
+  if [ $# -eq 0 ]; then
+    mask --maskfile ~/.config/maskfile.md --help
+  else
+    mask --maskfile ~/.config/maskfile.md "$@"
+  fi
+}
 alias idea="nvim '/home/nux/ObsVaults/Nux/00 Meta/✏Workbench.md'"
 alias history="history keep -1 | tac | cut -d' ' -f3- | fzf"
-alias esconfig="nvim ~/.dotfiles/espanso/.config/espanso/match/"
+alias esconfig="nvim ~/.dotfiles/espanso/.config/espanso/match/ && espanso restart"
 alias rm_pkg="paru -Qei | awk '/^Name/{name=\$3} /^Installed Size/{print \$4\$5, name}' | sort -h --reverse| fzf -m | cut -d' '  -f2 | xargs paru -Rns -"
 alias dust="br -w"
 alias grep="notify-send '# Try rg instead of grep'; grep"
 alias rg="notify-send '# Try rga instead of just rg, passing in -p anyway'; rg -p"
 
+alias chatblade="chatblade --openai-api-key $(keyring get OpenAI camerond.barts@gmail.com)"
 
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-eval "$(starship init zsh)"
-source /home/nux/.config/broot/launcher/bash/br
+
 export HISTFILE="$XDG_STATE_HOME"/zsh/history
 
 
@@ -219,17 +189,5 @@ rga-fzf() {
 }
 
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/anaconda/bin/conda' 'shell.zsh' 'hook' 2>&1 /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/opt/anaconda/etc/profile.d/conda.sh" ]; then
-        . "/opt/anaconda/etc/profile.d/conda.sh"
-    else
-        export PATH="/opt/anaconda/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-
+eval "$(starship init zsh)"
+# zprof

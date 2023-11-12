@@ -1,0 +1,248 @@
+{
+  "*": {
+    "env": "production",
+    "core": {
+      "themes": [
+        "ui-light"
+      ],
+      "disabledPackages": [
+        "message-view-on-github",
+        "personal-level-indicators",
+        "phishing-detection",
+        "nylas-private-salesforce",
+        "github-contact-card",
+        "keybase",
+        "composer-markdown",
+        "composer-scheduler",
+        "composer-mail-merge",
+        "send-and-archive",
+        "main-calendar"
+      ],
+      "workspace": {
+        "mode": "split",
+        "use24HourClock": true,
+        "showUnreadForAllCategories": true
+      },
+      "keymapTemplate": "Gmail",
+      "tutorial": {
+        "seen": [
+          "ThreadSearchBar",
+          "ActivityListButton"
+        ]
+      },
+      "theme": "ui-dark",
+      "reading": {
+        "markAsReadDelay": 2000,
+        "detailedHeaders": true,
+        "detailedNames": true
+      },
+      "sending": {
+        "undoSend": 30000
+      },
+      "notifications": {
+        "enabled": false,
+        "sounds": false
+      },
+      "attachments": {
+        "openFolderAfterDownload": true
+      }
+    },
+    "identity": {
+      "id": "4ca2762a-dc60-4fe5-b7e9-10c3558e9805",
+      "firstName": "Cam",
+      "lastName": "Barts",
+      "emailAddress": "CameronD.Barts+Mailspring@gmail.com",
+      "object": "identity",
+      "createdAt": "2021-03-09T18:48:52.000Z",
+      "stripePlan": "ProAnnual",
+      "stripePlanEffective": "ProAnnual",
+      "stripeCustomerId": "cus_J5LIMLkqZZr8Un",
+      "stripePeriodEnd": "2024-04-16T20:30:39.000Z",
+      "featureUsage": {
+        "snooze": {
+          "quota": 99999,
+          "period": "weekly",
+          "usedInPeriod": 0,
+          "featureLimitName": "pro"
+        },
+        "send-later": {
+          "quota": 99999,
+          "period": "weekly",
+          "usedInPeriod": 0,
+          "featureLimitName": "pro"
+        },
+        "thread-sharing": {
+          "quota": 99999,
+          "period": "weekly",
+          "usedInPeriod": 0,
+          "featureLimitName": "pro"
+        },
+        "link-tracking": {
+          "quota": 99999,
+          "period": "weekly",
+          "usedInPeriod": 0,
+          "featureLimitName": "pro"
+        },
+        "open-tracking": {
+          "quota": 99999,
+          "period": "weekly",
+          "usedInPeriod": 4,
+          "featureLimitName": "pro"
+        },
+        "contact-profiles": {
+          "quota": 20,
+          "period": "weekly",
+          "usedInPeriod": 4,
+          "featureLimitName": "pro"
+        },
+        "send-reminders": {
+          "quota": 99999,
+          "period": "weekly",
+          "usedInPeriod": 0,
+          "featureLimitName": "pro"
+        },
+        "translation": {
+          "quota": 800,
+          "period": "weekly",
+          "usedInPeriod": 0,
+          "featureLimitName": "pro"
+        }
+      }
+    },
+    "accounts": [
+      {
+        "id": "e3770adf",
+        "metadata": [],
+        "name": "Cam Barts",
+        "provider": "office365",
+        "emailAddress": "cam.barts@cfainstitute.org",
+        "settings": {
+          "imap_host": "outlook.office365.com",
+          "imap_port": 993,
+          "imap_username": "cam.barts@cfainstitute.org",
+          "imap_security": "SSL / TLS",
+          "imap_allow_insecure_ssl": false,
+          "smtp_host": "smtp.office365.com",
+          "smtp_port": 587,
+          "smtp_username": "cam.barts@cfainstitute.org",
+          "smtp_security": "STARTTLS",
+          "smtp_allow_insecure_ssl": false,
+          "container_folder": "",
+          "refresh_client_id": "8787a430-6eee-41e1-b914-681d90d35625"
+        },
+        "label": "cam.barts@cfainstitute.org",
+        "autoaddress": {
+          "type": "bcc",
+          "value": ""
+        },
+        "aliases": [],
+        "syncState": "ok",
+        "syncError": {
+          "code": 134,
+          "error": {
+            "stack": "Error: null2729689 [2023-09-05 07:22:41.172] [background] [critical] \n***\n*** Mailspring Sync \n*** An exception occurred during program execution: \n*** {\"debuginfo\":\"https://login.microsoftonline.com/common/oauth2/v2.0/token RETURNED {\\\"error\\\":\\\"invalid_grant\\\",\\\"error_description\\\":\\\"AADSTS50173: The provided grant has expired due to it being revoked, a fresh auth token is needed. The user might have changed or reset their password. The grant was issued on '2023-08-04T21:15:00.2424599Z' and the TokensValidFrom date (before which tokens are not valid) for this user is '2023-08-30T20:44:59.0000000Z'.\\\\r\\\\nTrace ID: 60c6e696-84b8-46f6-8e30-e6edc7911b00\\\\r\\\\nCorrelation ID: 69b340e7-a2be-4ab8-a530-f852f2870787\\\\r\\\\nTimestamp: 2023-09-05 11:22:41Z\\\",\\\"error_codes\\\":[50173],\\\"timestamp\\\":\\\"2023-09-05 11:22:41Z\\\",\\\"trace_id\\\":\\\"60c6e696-84b8-46f6-8e30-e6edc7911b00\\\",\\\"correlation_id\\\":\\\"69b340e7-a2be-4ab8-a530-f852f2870787\\\",\\\"error_uri\\\":\\\"https://login.microsoftonline.com/error?code=50173\\\"}\",\"key\":\"Invalid Response Code: 400\",\"retryable\":false,\"what\":\"std::exception\"}\n***\n\n2729689 [2023-09-05 07:22:41.172] [background] [critical] *** Stack trace (line numbers are approximate):\n*** ??:?        ValidateRequestResp(CURLcode, void*, string)\n*** ??:?        PerformRequest(void*)\n*** ??:?        PerformJSONRequest(void*)\n*** ??:?        MakeOAuthRefreshRequest(string, string, string)\n*** ??:?        XOAuth2TokenManager::partsForAccount(shared_ptr)\n*** ??:?        MailUtils::configureSessionForAccount(mailcore::IMAPSession&, shared_ptr)\n*** ??:?        SyncWorker::configure()\n*** ??:?        runBackgroundSyncWorker()\n*** main.cpp:?  main::{lambda()#3}::operator()() const\n*** main.cpp:?  _Bind_simple::operator()()\n*** main.cpp:?  thread::_Impl::_M_run()\n*** thread.o:?  execute_native_thread_routine()\n***\n\n/usr/share/mailspring/resources/app.asar.unpacked/mailsync: line 5: 2729689 Aborted                 (core dumped) SASL_PATH=\"$SCRIPTPATH\" LD_LIBRARY_PATH=\"$SCRIPTPATH;$LD_LIBRARY_PATH\" \"$SCRIPTPATH/mailsync.bin\" \"$@\"\n\n    at ChildProcess.onStreamCloseOrExit (file:///tmp/nylas-build/electron-packager/linux-x64/mailspring-linux-x64/resources/app/src/mailsync-process.ts:320:17)\n    at ChildProcess.emit (node:events:390:28)\n    at ChildProcess.emit (node:domain:475:12)\n    at Process.ChildProcess._handle.onexit (node:internal/child_process:290:12)",
+            "message": "null2729689 [2023-09-05 07:22:41.172] [background] [critical] \n***\n*** Mailspring Sync \n*** An exception occurred during program execution: \n*** {\"debuginfo\":\"https://login.microsoftonline.com/common/oauth2/v2.0/token RETURNED {\\\"error\\\":\\\"invalid_grant\\\",\\\"error_description\\\":\\\"AADSTS50173: The provided grant has expired due to it being revoked, a fresh auth token is needed. The user might have changed or reset their password. The grant was issued on '2023-08-04T21:15:00.2424599Z' and the TokensValidFrom date (before which tokens are not valid) for this user is '2023-08-30T20:44:59.0000000Z'.\\\\r\\\\nTrace ID: 60c6e696-84b8-46f6-8e30-e6edc7911b00\\\\r\\\\nCorrelation ID: 69b340e7-a2be-4ab8-a530-f852f2870787\\\\r\\\\nTimestamp: 2023-09-05 11:22:41Z\\\",\\\"error_codes\\\":[50173],\\\"timestamp\\\":\\\"2023-09-05 11:22:41Z\\\",\\\"trace_id\\\":\\\"60c6e696-84b8-46f6-8e30-e6edc7911b00\\\",\\\"correlation_id\\\":\\\"69b340e7-a2be-4ab8-a530-f852f2870787\\\",\\\"error_uri\\\":\\\"https://login.microsoftonline.com/error?code=50173\\\"}\",\"key\":\"Invalid Response Code: 400\",\"retryable\":false,\"what\":\"std::exception\"}\n***\n\n2729689 [2023-09-05 07:22:41.172] [background] [critical] *** Stack trace (line numbers are approximate):\n*** ??:?        ValidateRequestResp(CURLcode, void*, string)\n*** ??:?        PerformRequest(void*)\n*** ??:?        PerformJSONRequest(void*)\n*** ??:?        MakeOAuthRefreshRequest(string, string, string)\n*** ??:?        XOAuth2TokenManager::partsForAccount(shared_ptr)\n*** ??:?        MailUtils::configureSessionForAccount(mailcore::IMAPSession&, shared_ptr)\n*** ??:?        SyncWorker::configure()\n*** ??:?        runBackgroundSyncWorker()\n*** main.cpp:?  main::{lambda()#3}::operator()() const\n*** main.cpp:?  _Bind_simple::operator()()\n*** main.cpp:?  thread::_Impl::_M_run()\n*** thread.o:?  execute_native_thread_routine()\n***\n\n/usr/share/mailspring/resources/app.asar.unpacked/mailsync: line 5: 2729689 Aborted                 (core dumped) SASL_PATH=\"$SCRIPTPATH\" LD_LIBRARY_PATH=\"$SCRIPTPATH;$LD_LIBRARY_PATH\" \"$SCRIPTPATH/mailsync.bin\" \"$@\"\n"
+          },
+          "signal": null
+        },
+        "authedAt": 1693912982.89,
+        "color": "#23d188",
+        "__cls": "Account"
+      },
+      {
+        "id": "a650bfbf",
+        "metadata": [],
+        "name": "Cam",
+        "provider": "gmail",
+        "emailAddress": "camerond.barts@gmail.com",
+        "settings": {
+          "imap_host": "imap.gmail.com",
+          "imap_port": 993,
+          "imap_username": "camerond.barts@gmail.com",
+          "imap_security": "SSL / TLS",
+          "imap_allow_insecure_ssl": false,
+          "smtp_host": "smtp.gmail.com",
+          "smtp_port": 587,
+          "smtp_username": "camerond.barts@gmail.com",
+          "smtp_security": "STARTTLS",
+          "smtp_allow_insecure_ssl": false,
+          "container_folder": "",
+          "refresh_client_id": "662287800555-pdiq3r3puob8a44locitndbocua7c30f.apps.googleusercontent.com"
+        },
+        "label": "camerond.barts@gmail.com",
+        "autoaddress": {
+          "type": "bcc",
+          "value": ""
+        },
+        "aliases": [],
+        "syncState": "ok",
+        "syncError": null,
+        "authedAt": 1692140697.449,
+        "color": "#ff0d8a",
+        "__cls": "Account"
+      },
+      {
+        "id": "a982f2f3",
+        "metadata": [],
+        "name": "Cam Barts",
+        "provider": "outlook",
+        "emailAddress": "cam.barts@outlook.com",
+        "settings": {
+          "imap_host": "imap-mail.outlook.com",
+          "imap_port": 993,
+          "imap_username": "cam.barts@outlook.com",
+          "imap_security": "SSL / TLS",
+          "imap_allow_insecure_ssl": false,
+          "smtp_host": "smtp-mail.outlook.com",
+          "smtp_port": 587,
+          "smtp_username": "cam.barts@outlook.com",
+          "smtp_security": "STARTTLS",
+          "smtp_allow_insecure_ssl": false,
+          "container_folder": ""
+        },
+        "label": "cam.barts@outlook.com",
+        "autoaddress": {
+          "type": "bcc",
+          "value": ""
+        },
+        "aliases": [],
+        "syncState": "ok",
+        "syncError": null,
+        "authedAt": 1692140714.703,
+        "color": "#28b8db",
+        "__cls": "Account"
+      }
+    ],
+    "accountsVersion": 127,
+    "containerFolderDefault": "",
+    "signatures": {
+      "initial": {
+        "id": "initial",
+        "title": "Default",
+        "body": "<div>\n    <table cellpadding=\"0\" cellspacing=\"0\">\n        <tbody>\n            <tr>\n                <td colspan=\"2\">\n                    <div style=\"padding-bottom: 15px\">\n                        <div><strong><a style=\"color: #ff0d8a; text-decoration: none; font-size: 25px; font-family: 'Monospace'\" href=mailto:cam.barts@cfainstitute.org\">Cam Barts</a></strong></div>\n                        <div>Manager, <i>Site Reliability Engineering</i><br>\n</div>\n                    </div>\n                </td>\n            </tr>\n            <tr>\n                <td style=\"vertical-align: top\">\n                    <img alt=\"\" src=\"https://avatars.githubusercontent.com/u/13058567?v=5\" width=\"90\" height=\"90\" style=\"max-width: 200px; max-height: 90px; border-radius: 5px;\"\n                    />\n                </td>\n                <td>\n                    <div style=\"font-size: 0.9em; white-space:nowrap; border-left: 2px solid #5D4FBA; margin-left: 20px; padding-left: 20px;\">\n                        <div>\n                            <div>\n                                <a style=\"color: #5D4FBA\" href=\"https://cfainstitute.atlassian.net/servicedesk/customer/portal/41\">Submit A Ticket</a>\n                            </div>\n                            <div>\n                                <a style=\"color: #5D4FBA\" href=\"https://tldr.cam/office-hours\">Attend Office Hours</a>\n                            </div>\n                            <div>\n                                <a style=\"color: #5D4FBA\" href=\"mailto:itsm@cfainstitute.org\">Contact ITSM Team</a>\n                            </div>\n                            <div></div>\n                            <div>\n                                <a style=\"color: #5D4FBA\" href=\"https://tldr.cam/linkedin\">Connect On LinkedIn</a>\n                            </div>\n                            <div style=\"color: #5D4FBA\">\n                                <a style=\"color: #5D4FBA\" href=\"https://sbmueller.github.io/nohello/\">NoHello</a> |\n                                <a style=\"color: #5D4FBA\" href=\"https://xyproblem.info/\">XY Problem</a> |\n                                <a style=\"color: #5D4FBA\" href=\"https://www.ietf.org/rfc/rfc1855.txt\">Netiquette</a>\n                            </div>\n                        </div>\n                    </div>\n                </td>\n            </tr>\n        </tbody>\n    </table>\n</div>",
+        "data": {
+          "title": "Sent from Mailspring, the best free email app for work"
+        }
+      },
+      "local-58b018b5-3064": {
+        "id": "local-58b018b5-3064",
+        "title": "Work External",
+        "body": "<div>\n    <table cellpadding=\"0\" cellspacing=\"0\">\n        <tbody>\n            <tr>\n                <td style=\"vertical-align: top\">\n                    <img alt=\"\" src=\"https://avatars.githubusercontent.com/u/13058567?v=5\" width=\"90\" height=\"90\" style=\"max-width: 200px; max-height: 90px; border-radius: 5px;\"\n                    />\n                </td>\n                <td>\n                    <div style=\"font-size: 0.9em; white-space:nowrap; border-left: 2px solid #ff0d8a; margin-left: 20px; padding-left: 20px;\">\n                        <div>\n          <div>\n                        <div><strong><a style=\"color: #ff0d8a\" href=\"https://tldr.cam/linkedin\">Cam Barts</a></strong></div>\n                        <div>Manager, Site Reliability Engineering<i><br><a\nstyle=\"color: white; text-decoration: none;\" href=\"https://www.cfainstitute.org/\">CFA Institute</a></i></div>\n                    </div>\n                        </div>\n                    </div>\n                </td>\n            </tr>\n        </tbody>\n    </table>\n</div>",
+        "data": {
+          "title": "Sent from Mailspring, the best free email app for work"
+        }
+      }
+    },
+    "defaultSignatures": {
+      "cam.barts@cfainstitute.org": "initial"
+    },
+    "plugins": {
+      "link-tracking": {
+        "defaultOn": false
+      }
+    },
+    "mailto": {
+      "prompted-about-default": true
+    }
+  }
+}

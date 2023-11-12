@@ -66,4 +66,6 @@ matches:
           cmd: "secret-tool search Title \"Work SSO\" 2>&1 | grep \"TOTP\" | cut -d\" \" -f3"
   - trigger: ";;oh"
     replace: "https://tldr.cam/office-hours"
+  - triggers: [";;time-analysis", ";;worth-time"] 
+    image_path: "$CONFIG/images/is_it_worth_the_time.png"
 

@@ -21,7 +21,7 @@ return {
   },
   {
     "s1n7ax/nvim-window-picker",
-    name = "window-picker",
+    main = "window-picker",
     opts = { picker_config = { statusline_winbar_picker = { use_winbar = "smart" } } },
   },
   {
@@ -30,7 +30,7 @@ return {
   },
   {
     "windwp/nvim-autopairs",
-    event = "InsertEnter",
+    event = "User AstroFile",
     opts = {
       check_ts = true,
       ts_config = { java = false },

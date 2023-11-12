@@ -46,13 +46,25 @@ matches:
         params:
           cmd: 'curl "wttr.in/?format=4"'
   # Obsidian Linkage
-  - trigger: ";;obslink"
+  - trigger: ";;obs.link"
     replace: "[[{{filename}}]]"
     vars:
       - name: filename
         type: shell
         params:
-          cmd: 'fd . --extension md --exclude "02 Vault Meta" --exclude "91 Slides Export" -x echo "{/.}" | sort | rofi -dmenu -p "Link Obsidian"'
+          cmd: 'fd . "/home/nux/ObsVaults/Nux" --extension md --exclude "02 Vault Meta" --exclude "91 Slides Export" -x echo "{/.}" | sort | rofi -dmenu -p "Link Obsidian"'
+  - trigger: ";;obs.uri"
+    replace: "https://obsidian-link.coder.cam?vault=Nux&filepath={{output}}"
+    vars:
+      - name: filename
+        type: shell
+        params:
+          cmd: 'fd . "/home/nux/ObsVaults/Nux" --extension md --exclude "02 Vault Meta" --exclude "91 Slides Export" -x echo "{/.}" | sort | rofi -dmenu -p "Link Obsidian"'
+      - name: output
+        type: shell
+        params:
+          cmd: 'fd "**/$ESPANSO_FILENAME.md" --glob --full-path "/home/nux/ObsVaults/Nux" --extension md --exclude "02 Vault Meta" --exclude "91 Slides Export" -x echo "{}" | sed "s/\/home\/nux\/ObsVaults\/Nux\///g" | urlencode -l | sed "s/\+/\%2520/g"'
+          debug: true
   - trigger: ";;zen"
     replace: |
       Beautiful is better than ugly.
