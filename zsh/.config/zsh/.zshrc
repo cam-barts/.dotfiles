@@ -5,7 +5,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+# export ZSH="$HOME/.oh-my-zsh"
 
 
 # Uncomment one of the following lines to change the auto-update behavior
@@ -36,11 +36,11 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # plugins=(git docker docker-compose alias-finder zsh-autosuggestions)
 
 plugins=(zsh-autosuggestions)
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 source ~/.profile
-source ~/goto.sh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# source ~/goto.sh
+# source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /home/nux/.config/broot/launcher/bash/br
 
 # autoload -Uz compinit
@@ -165,10 +165,10 @@ alias history="history keep -1 | tac | cut -d' ' -f3- | fzf"
 alias esconfig="nvim ~/.dotfiles/espanso/.config/espanso/match/ && espanso restart"
 alias rm_pkg="paru -Qei | awk '/^Name/{name=\$3} /^Installed Size/{print \$4\$5, name}' | sort -h --reverse| fzf -m | cut -d' '  -f2 | xargs paru -Rns -"
 alias dust="br -w"
-alias grep="notify-send '# Try rg instead of grep'; grep"
-alias rg="notify-send '# Try rga instead of just rg, passing in -p anyway'; rg -p"
+# alias grep="notify-send '# Try rg instead of grep'; grep"
+# alias rg="notify-send '# Try rga instead of just rg, passing in -p anyway'; rg -p"
 
-alias chatblade="chatblade --openai-api-key $(keyring get OpenAI camerond.barts@gmail.com)"
+# alias chatblade="chatblade --openai-api-key $(keyring get OpenAI camerond.barts@gmail.com)"
 
 
 export HISTFILE="$XDG_STATE_HOME"/zsh/history

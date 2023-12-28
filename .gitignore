@@ -1,0 +1,4 @@
+mailspring/.config/Mailspring/*
+!mailspring/.config/Mailspring/config.json
+rofi/.config/rofi/obs.txt
+rofi/.config/rofi/projects.txt
