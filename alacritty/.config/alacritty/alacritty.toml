@@ -104,7 +104,8 @@ program = "/usr/bin/zsh"
 decorations = "full"
 dynamic_padding = true
 opacity = 0.98
-title = "alacritty"
+# title = "alacritty"
+dynamic_title = true
 
 [window.class]
 general = "Alacritty"

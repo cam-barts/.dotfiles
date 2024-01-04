@@ -163,10 +163,9 @@ function Mask() {
 alias idea="nvim '/home/nux/ObsVaults/Nux/00 Meta/✏Workbench.md'"
 alias history="history keep -1 | tac | cut -d' ' -f3- | fzf"
 alias esconfig="nvim ~/.dotfiles/espanso/.config/espanso/match/ && espanso restart"
+alias nvimconfig="nvim ~/.config/nvim"
 alias rm_pkg="paru -Qei | awk '/^Name/{name=\$3} /^Installed Size/{print \$4\$5, name}' | sort -h --reverse| fzf -m | cut -d' '  -f2 | xargs paru -Rns -"
 alias dust="br -w"
-# alias grep="notify-send '# Try rg instead of grep'; grep"
-# alias rg="notify-send '# Try rga instead of just rg, passing in -p anyway'; rg -p"
 
 # alias chatblade="chatblade --openai-api-key $(keyring get OpenAI camerond.barts@gmail.com)"
 
