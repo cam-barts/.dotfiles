@@ -29,7 +29,15 @@ M.diagnostics = { [0] = {}, {}, {}, {} }
 M.setup_diagnostics = function(signs)
   local default_diagnostics = astronvim.user_opts("diagnostics", {
     virtual_text = true,
-    signs = { active = signs },
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = utils.get_icon "DiagnosticError",
+        [vim.diagnostic.severity.HINT] = utils.get_icon "DiagnosticHint",
+        [vim.diagnostic.severity.WARN] = utils.get_icon "DiagnosticWarn",
+        [vim.diagnostic.severity.INFO] = utils.get_icon "DiagnosticInfo",
+      },
+      active = signs,
+    },
     update_in_insert = true,
     underline = true,
     severity_sort = true,
@@ -281,7 +289,7 @@ M.on_attach = function(client, bufnr)
     if vim.b.inlay_hints_enabled == nil then vim.b.inlay_hints_enabled = vim.g.inlay_hints_enabled end
     -- TODO: remove check after dropping support for Neovim v0.9
     if vim.lsp.inlay_hint then
-      if vim.b.inlay_hints_enabled then vim.lsp.inlay_hint(bufnr, true) end
+      if vim.b.inlay_hints_enabled then vim.lsp.inlay_hint.enable(bufnr, true) end
       lsp_mappings.n["<leader>uH"] = {
         function() require("astronvim.utils.ui").toggle_buffer_inlay_hints(bufnr) end,
         desc = "Toggle LSP inlay hints (buffer)",

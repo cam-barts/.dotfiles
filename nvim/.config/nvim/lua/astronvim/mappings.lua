@@ -25,6 +25,7 @@ maps.n["j"] = { "v:count == 0 ? 'gj' : 'j'", expr = true, desc = "Move cursor do
 maps.n["k"] = { "v:count == 0 ? 'gk' : 'k'", expr = true, desc = "Move cursor up" }
 maps.n["<leader>w"] = { "<cmd>w<cr>", desc = "Save" }
 maps.n["<leader>q"] = { "<cmd>confirm q<cr>", desc = "Quit" }
+maps.n["<leader>Q"] = { "<cmd>confirm qall<cr>", desc = "Quit all" }
 maps.n["<leader>n"] = { "<cmd>enew<cr>", desc = "New File" }
 maps.n["<C-s>"] = { "<cmd>w!<cr>", desc = "Force write" }
 maps.n["<C-q>"] = { "<cmd>qa!<cr>", desc = "Force quit" }
@@ -126,10 +127,10 @@ if is_available "alpha-nvim" then
   maps.n["<leader>h"] = {
     function()
       local wins = vim.api.nvim_tabpage_list_wins(0)
-      if #wins > 1 and vim.api.nvim_get_option_value("filetype", { win = wins[1] }) == "neo-tree" then
+      if #wins > 1 and vim.bo[vim.api.nvim_win_get_buf(wins[1])].filetype == "neo-tree" then
         vim.fn.win_gotoid(wins[2]) -- go to non-neo-tree window to toggle alpha
       end
-      require("alpha").start(false, require("alpha").default_config)
+      require("alpha").start(false)
     end,
     desc = "Home Screen",
   }
@@ -290,6 +291,8 @@ if is_available "telescope.nvim" then
   if is_available "nvim-notify" then
     maps.n["<leader>fn"] =
       { function() require("telescope").extensions.notify.notify() end, desc = "Find notifications" }
+    maps.n["<leader>uD"] =
+      { function() require("notify").dismiss { pending = true, silent = true } end, desc = "Dismiss notifications" }
   end
   maps.n["<leader>fo"] = { function() require("telescope.builtin").oldfiles() end, desc = "Find history" }
   maps.n["<leader>fr"] = { function() require("telescope.builtin").registers() end, desc = "Find registers" }
@@ -336,8 +339,9 @@ if is_available "toggleterm.nvim" then
   if vim.fn.executable "node" == 1 then
     maps.n["<leader>tn"] = { function() utils.toggle_term_cmd "node" end, desc = "ToggleTerm node" }
   end
-  if vim.fn.executable "gdu" == 1 then
-    maps.n["<leader>tu"] = { function() utils.toggle_term_cmd "gdu" end, desc = "ToggleTerm gdu" }
+  local gdu = vim.fn.has "mac" == 1 and "gdu-go" or "gdu"
+  if vim.fn.executable(gdu) == 1 then
+    maps.n["<leader>tu"] = { function() utils.toggle_term_cmd(gdu) end, desc = "ToggleTerm gdu" }
   end
   if vim.fn.executable "btm" == 1 then
     maps.n["<leader>tt"] = { function() utils.toggle_term_cmd "btm" end, desc = "ToggleTerm btm" }

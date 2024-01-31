@@ -43,11 +43,11 @@ source ~/.profile
 # source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /home/nux/.config/broot/launcher/bash/br
 
-# autoload -Uz compinit
+autoload -Uz compinit
 #
 # zstyle ':completion:*' menu select
 # zmodload zsh/complist
-# compinit
+compinit
 
 autoload -Uz colors && colors
 
@@ -166,7 +166,6 @@ alias esconfig="nvim ~/.dotfiles/espanso/.config/espanso/match/ && espanso resta
 alias nvimconfig="nvim ~/.config/nvim"
 alias rm_pkg="paru -Qei | awk '/^Name/{name=\$3} /^Installed Size/{print \$4\$5, name}' | sort -h --reverse| fzf -m | cut -d' '  -f2 | xargs paru -Rns -"
 alias dust="br -w"
-
 # alias chatblade="chatblade --openai-api-key $(keyring get OpenAI camerond.barts@gmail.com)"
 
 
@@ -187,6 +186,6 @@ rga-fzf() {
 	xdg-open "$file"
 }
 
-
+eval "$(atuin init zsh)"
 eval "$(starship init zsh)"
 # zprof

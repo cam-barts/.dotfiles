@@ -1,5 +1,5 @@
 matches:
   - trigger: ";;paste"
     replace: "https://paste.coder.cam/client"
-  - trigger: "chatblade"
+  - trigger: ";;cb"
     replace: "chatblade --openai-api-key $(keyring get OpenAI camerond.barts@gmail.com)"

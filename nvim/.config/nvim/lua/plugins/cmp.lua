@@ -1,6 +1,7 @@
 return {
   {
     "L3MON4D3/LuaSnip",
+    lazy = true,
     build = vim.fn.has "win32" == 0
         and "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build\n'; make install_jsregexp"
       or nil,
@@ -86,7 +87,7 @@ return {
           ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
-            elseif luasnip.expand_or_jumpable() then
+            elseif luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
             elseif has_words_before() then
               cmp.complete()
