@@ -104,7 +104,7 @@ alias open='xdg-open'
 alias grubup="sudo update-grub"
 alias tarnow='tar -acf '
 alias untar='tar -zxvf '
-alias wget='wget -c '
+alias wget='wget -c --hsts-file="$XDG_DATA_HOME/wget-hsts"'
 alias psmem='ps auxf | sort -nr -k 4'
 alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 alias dir='dir --color=auto'

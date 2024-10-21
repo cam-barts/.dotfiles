@@ -27,24 +27,29 @@ export TEXMFVAR="$XDG_CACHE_HOME"/texlive/texmf-var
 export WINEPREFIX="$XDG_DATA_HOME"/wine
 export ZDOTDIR="$HOME"/.config/zsh
 
-
+export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 # ---- Previous Profile -------
 export AMD_VULKAN_ICD=RADV
 export EDITOR=nvim
 export VISUAL=nvim
-# export GTK2_RC_FILES="$HOME/.gtkrc-2.0"
-export BROWSER=thorium-browser
+export BROWSER=chromium
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
-export MANPAGER="bat -l man -p"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
 export PYTHON_KEYRING_BACKEND=keyring.backends.SecretService.Keyring
 export NMAP_PRIVILEGED="" # https://secwiki.org/w/Running_nmap_as_an_unprivileged_user
 export PIPENV_VENV_IN_PROJECT=1 # https://pipenv.pypa.io/en/latest/install/#virtualenv-mapping-caveat
 export BORG_PASSCOMMAND='secret-tool lookup service borg'
-# export QT_STYLE_OVERRIDE=breeze
 export PYTHONPATH=.
 export PASTETIME=5
 export GTK_THEME=""
 PATH=$PATH:/opt/anaconda/bin/
 PATH=$PATH:$GOPATH/bin
-# export QT_QPA_PLATFORMTHEME=qt5ct
+
+# -- XDG-Ninja 20241021 --
+export DOTNET_CLI_HOME="$XDG_DATA_HOME"/dotnet
+export PARALLEL_HOME="$XDG_CONFIG_HOME"/parallel
+export WAKATIME_HOME='$XDG_CONFIG_HOME/wakatime'
+
+
 . "$HOME/.local/share/cargo/env"
