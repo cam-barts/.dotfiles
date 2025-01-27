@@ -165,9 +165,10 @@ alias history="history keep -1 | tac | cut -d' ' -f3- | fzf"
 alias esconfig="nvim ~/.dotfiles/espanso/.config/espanso/match/ && espanso restart"
 alias nvimconfig="nvim ~/.config/nvim"
 alias rm_pkg="paru -Qei | awk '/^Name/{name=\$3} /^Installed Size/{print \$4\$5, name}' | sort -h --reverse| fzf -m | cut -d' '  -f2 | xargs paru -Rns -"
-alias dust="br -w"
+# alias dust="br -w"
 # alias chatblade="chatblade --openai-api-key $(keyring get OpenAI camerond.barts@gmail.com)"
-
+alias ,bw_lock="source ,bw_lock"
+alias ,bw_unlock="source ,bw_unlock"
 
 export HISTFILE="$XDG_STATE_HOME"/zsh/history
 
@@ -189,3 +190,6 @@ rga-fzf() {
 eval "$(atuin init zsh)"
 eval "$(starship init zsh)"
 # zprof
+
+# bun completions
+[ -s "/home/nux/.local/share/reflex/bun/_bun" ] && source "/home/nux/.local/share/reflex/bun/_bun"

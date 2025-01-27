@@ -21,3 +21,5 @@ source /home/nux/.config/broot/launcher/bash/br
 
 # Created by `pipx` on 2023-12-07 00:42:22
 export PATH="$PATH:/home/nux/.local/bin"
+
+complete -C /home/nux/.local/bin/mc mc

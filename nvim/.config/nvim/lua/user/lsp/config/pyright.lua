@@ -6,7 +6,7 @@ return {
         autoSearchPaths = true,
         diagnosticMode = "openFilesOnly",
         useLibraryCodeForTypes = true,
-        typeCheckingMode = "strict",
+        typeCheckingMode = "off",
         venvPath = ".venv",
       },
     },

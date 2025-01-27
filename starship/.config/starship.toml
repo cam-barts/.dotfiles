@@ -31,55 +31,25 @@ deleted = "x"
 
 # Last param in the first line/row
 [cmd_duration]
-min_time = 1
+min_time = 10
 format = "took [$duration]($style)"
 disabled = false
 
+[env_var.BW_SESSION]
+variable = 'BW_SESSION'
+description = "BitWarden CLI Unlocked"
+format = '[󰿇](bold #28D8DB) '
+disabled = false
 
 ## SECOND LINE/ROW: Prompt
 # Somethere at the beginning
-[battery]
-full_symbol = " "
-charging_symbol = " "
-discharging_symbol = " "
-disabled = true
-
-[[battery.display]]  # "bold red" style when capacity is between 0% and 10%
-threshold = 15
-style = "bold red"
-disabled = true
-
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
-threshold = 50
-style = "bold yellow"
-disabled = true
-
-[[battery.display]]  # "bold green" style when capacity is between 10% and 30%
-threshold = 80
-style = "bold green"
-disabled = true
-
-# Prompt: optional param 1
-[time]
-format = " 🕙 $time($style)\n"
-time_format = "%T"
-style = "bright-white"
-disabled = true
-
 # Prompt: param 2 └─
 [character]
 success_symbol = " [╰─](bold red)[λ](green)"
-error_symbol = ' [╰─⚠ ](#A51D2A)'
-# error_symbol = " [×](bold #A51D2A)" # bootstrap red
+error_symbol = ' [╰─](bold red)[⚠](#A51D2A)'
 
 
 # SYMBOLS
-[status]
-symbol = "⚠ "
-format = '[\[$symbol$status_common_meaning$status_signal_name$status_maybe_int\]](bold #A51D2A)'
-map_symbol = true
-disabled = true
-
 [aws]
 symbol = " "
 

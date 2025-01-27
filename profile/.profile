@@ -45,11 +45,12 @@ export PASTETIME=5
 export GTK_THEME=""
 PATH=$PATH:/opt/anaconda/bin/
 PATH=$PATH:$GOPATH/bin
+PATH=$PATH:/home/nux/.local/share/npm/bin
 
 # -- XDG-Ninja 20241021 --
 export DOTNET_CLI_HOME="$XDG_DATA_HOME"/dotnet
 export PARALLEL_HOME="$XDG_CONFIG_HOME"/parallel
-export WAKATIME_HOME='$XDG_CONFIG_HOME/wakatime'
+export WAKATIME_HOME="$XDG_CONFIG_HOME"/wakatime
 
 
 . "$HOME/.local/share/cargo/env"
