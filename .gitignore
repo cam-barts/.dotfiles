@@ -4,3 +4,4 @@ rofi/.config/rofi/obs.txt
 rofi/.config/rofi/projects.txt
 tmux/.config/tmux/plugins/
 zsh/.config/zsh/.zcompdump
+tmux/.config/tmux/resurrect/
