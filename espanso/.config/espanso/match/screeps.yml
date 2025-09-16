@@ -1,0 +1,21 @@
+filter_title: Screeps
+enable: True
+
+
+matches:
+  # Simple text replacement
+  - trigger: ";;spawn"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: choice
+        params:
+          values:
+            - label: "Filler 1"
+              id: "Game.spawns['HQ'].spawnCreep([WORK, CARRY, MOVE, MOVE], 'filler-1-' + Game.time);"
+            - label: "Filler 2"
+              id: "Game.spawns['HQ'].spawnCreep([WORK, CARRY, MOVE, MOVE, WORK, CARRY, MOVE, MOVE], 'filler-2-' + Game.time);"
+            - label: "Harvester 1"
+              id: "Game.spawns['HQ'].spawnCreep([WORK, CARRY, MOVE, MOVE], 'harvester-1-' + Game.time);"
+            - label: "Harvester 2"
+              id: "Game.spawns['HQ'].spawnCreep([WORK, CARRY, MOVE, MOVE, WORK, CARRY, MOVE, MOVE], 'harvester-2-' + Game.time);"

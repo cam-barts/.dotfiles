@@ -41,7 +41,6 @@ plugins=(zsh-autosuggestions)
 source ~/.profile
 # source ~/goto.sh
 # source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /home/nux/.config/broot/launcher/bash/br
 
 autoload -Uz compinit
 #
@@ -150,8 +149,6 @@ path+=("$HOME/.local/bin")
 path+=("$HOME/.local/share/gem/ruby/3.0.0/bin")
 path+=("$XDG_DATA_HOME/cargo/bin")
 
-alias Just="just --justfile ~/.user.justfile --working-directory ."
-
 # alias Mask="mask --maskfile ~/.config/maskfile.md"
 function Mask() {
   if [ $# -eq 0 ]; then
@@ -160,10 +157,11 @@ function Mask() {
     mask --maskfile ~/.config/maskfile.md "$@"
   fi
 }
-alias idea="nvim '/home/nux/ObsVaults/Nux/00 Meta/✏Workbench.md'"
+alias idea="nvim '/home/nux/ObsVaults/Nux/00 Admin/✏Workbench.md'"
 alias history="history keep -1 | tac | cut -d' ' -f3- | fzf"
 alias esconfig="nvim ~/.dotfiles/espanso/.config/espanso/match/ && espanso restart"
 alias nvimconfig="nvim ~/.config/nvim"
+alias zkconfig="nvim ~/.config/zk/config.toml"
 alias rm_pkg="paru -Qei | awk '/^Name/{name=\$3} /^Installed Size/{print \$4\$5, name}' | sort -h --reverse| fzf -m | cut -d' '  -f2 | xargs paru -Rns -"
 # alias dust="br -w"
 # alias chatblade="chatblade --openai-api-key $(keyring get OpenAI camerond.barts@gmail.com)"
@@ -172,6 +170,13 @@ alias ,bw_unlock="source ,bw_unlock"
 
 export HISTFILE="$XDG_STATE_HOME"/zsh/history
 
+
+# If kitty is installed, use kittens
+if command -v kitty &> /dev/null; then
+  # Alias ssh to kitten ssh
+  alias ssh='kitten ssh'
+  alias diff='kitten diff'
+fi
 
 rga-fzf() {
 	RG_PREFIX="rga --files-with-matches"

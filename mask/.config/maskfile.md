@@ -22,6 +22,7 @@ git config user.signingkey E08E7B2D3186FB5B
 git config user.email cam.barts@cfainstitute.org
 git config user.name "Cam Barts"
 git config commit.gpgsign true
+git config core.fileMode false
 
 echo "Update Repo remote like this: git config remote.origin.url=work-github:CFA-Institute/ITSM.DREW.git"
 ~~~
@@ -65,6 +66,15 @@ export BORG_PASSCOMMAND='gpg --decrypt /home/nux/borg_pass.gpg'
 ntfy publish -t "Borg Backup Started" -p 4 --tags=backup,floppy_disk,star2,stopwatch citadel_events "Borg Backup Started for Warrig Machine"
 borg create /mnt/flash/borg_backup::$(date -Is) /home/backup/rsnapshot_backups/ --stats --compression zstd,22
 ntfy publish -t "Borg Backup Completed" -p 4 --tags=backup,floppy_disk,star2,white_check_mark citadel_events "Borg Backup Completed for Warrig Machine"
+~~~
+
+### docker-cleanup
+
+> Pull new images and clean up system 
+
+~~~sh
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower --run-once
+docker system prune -a
 ~~~
 
 ## utils
@@ -134,65 +144,68 @@ rm "$temp_file"
 find . -name "*sync-conflict*" -exec rm -rf {} \;
 ~~~
 
-### parse-python (filename)
+### git-branch-cleanup
 
-> Output better python
+> Delete all branches without upstreams
 
-~~~python
-import argparse
-import os
-import subprocess
-import keyring
-from rich import print
+~~~sh
+git fetch --all --prune
+git branch -vv | grep ': gone]' | awk '{print $1}' | xargs -r git branch -D
+~~~
 
-open_ai_keyring = keyring.get_password("OpenAI", "camerond.barts@gmail.com")
 
-# Function to split the input into chunks
-def split_input(input_str):
-    chunks = []
-    current_chunk = []
-    chunk_splitters = ['\t', '    ',]
-    for line in input_str.splitlines():
-        if all([splitter not in line for splitter in chunk_splitters]):
-            if current_chunk:
-                chunks.append('\n'.join(current_chunk))
-	            current_chunk = []
-        current_chunk.append(line)
-    if current_chunk:
-        chunks.append('\n'.join(current_chunk))
-    return chunks
+### transcribe
 
-# Determine the output filename
-input_filename = os.getenv("filename", "")
-output_filename = os.path.splitext(input_filename)[0] + "_new" + os.path.splitext(input_filename)[1]
+> Transcribe an MP3 file into text
 
-# Read the input file
-with open(input_filename, 'r') as input_file:
-    input_content = input_file.read()
+**OPTIONS**
+* filename
+	* flags: -f --filename
+    * type: string
+    * desc: File to transcribe
 
-# Split the input into chunks
-input_chunks = split_input(input_content)
-print(f"Collected {len(input_chunks)} chunks, refactoring...")
+~~~sh
+whisper "$filename" -f txt --model medium.en
+~~~
 
-# Process each chunk and append the output to the output file
-for chunk in input_chunks:
-    if 'import' not in chunk:
-        process = subprocess.Popen(
-        ['chatblade', '--openai-api-key', open_ai_keyring, '-e', '-p', 'python'],
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True
-        )
-    
-        output, _ = process.communicate(input=chunk)
-    else:
-        output = chunk
-    
-    with open(output_filename, 'a') as output_file:
-        output_file.write(f"{output}\n")
+## edit
 
-print(f"Script processing complete. Output saved to '{output_filename}', formatting...")
-subprocess.Popen(["black", output_filename])
-subprocess.Popen(["ruff", "check", output_filename, "--fix"])
+> Edit the Global Maskfile
+
+~~~sh
+xdg-open "obsidian://adv-uri?vault=Nux&filepath=60%20Interests%2F63%20Configs%2FGlobal%20Maskfile.md"
+~~~
+
+## hoarder
+
+> Interface with Karakeep (Hoarder)
+
+~~~sh
+mask --maskfile ~/.config/maskfile.md hoarder --help
+docker run --rm ghcr.io/karakeep-app/karakeep-cli:release --help
+~~~
+
+### bookmarks
+
+> List bookmarks
+
+~~~sh
+docker run --rm ghcr.io/karakeep-app/karakeep-cli:release --api-key $(secret-tool lookup service "Hoarder API Key") --server-addr https://hoarder.coder.cam bookmarks list
+~~~
+
+#### add
+
+> Add a new bookmark
+
+**OPTIONS**
+* url
+	* flags: -u --url
+    * type: string
+    * desc: URL to save
+
+~~~sh
+if [[ -z "$url" ]]; then
+    url=$(gum input --placeholder "Link")
+fi
+docker run --rm ghcr.io/karakeep-app/karakeep-cli:release --api-key $(secret-tool lookup service "Hoarder API Key") --server-addr https://hoarder.coder.cam bookmarks add --link "$url"
 ~~~

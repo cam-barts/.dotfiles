@@ -3,3 +3,10 @@ matches:
     replace: "https://paste.coder.cam/client"
   - trigger: ";;cb"
     replace: "chatblade --openai-api-key $(keyring get OpenAI camerond.barts@gmail.com)"
+  - trigger: ";;pika.pass"
+    replace: "{{output}}"
+    vars:
+      - name: output
+        type: shell
+        params:
+          cmd: 'secret-tool lookup Title "Pika Backup “netbackup on gastown – smb://gastown/netbackup/pika_backup”"'

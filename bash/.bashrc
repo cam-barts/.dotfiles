@@ -13,9 +13,9 @@ export HISTFILE="${XDG_STATE_HOME}"/bash/history
 # Source goto
 [[ -s "/usr/local/share/goto.sh" ]] && source /usr/local/share/goto.sh
 
-. "$HOME/.cargo/env"
+# . "$HOME/.cargo/env"
 
-source /home/nux/.config/broot/launcher/bash/br
+# source /home/nux/.config/broot/launcher/bash/br
 
 [[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh
 

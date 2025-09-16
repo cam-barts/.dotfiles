@@ -16,7 +16,7 @@
 
 configuration {
 	/*---------- General setting ----------*/
-	modes: "drun,run,filebrowser,window,ssh,emoji:/usr/bin/rofimoji";
+	modes: "combi,window,Hoarder:/home/nux/.local/bin/rofi_bookmarks_dmenu.sh,calc,drun,run,filebrowser,ssh,Emoji:/usr/bin/rofimoji";
 	case-sensitive: false;
 	cycle: true;
 	filter: "";
@@ -70,7 +70,7 @@ configuration {
 	window-thumbnail: false;
 
 	/*---------- Combi settings ----------*/
-/*	combi-modi: "window,run";*/
+    combi-modi: "window,drun,Hoarder";
 /*	combi-hide-mode-prefix: false;*/
 /*	combi-display-format: "{mode} {text}";*/
 
@@ -88,9 +88,10 @@ configuration {
 	display-combi: "Combi";
 	display-keys: "Keys";
 	display-filebrowser: "Files";
+	display-calc: "Calc";
 
 	/*---------- Misc setting ----------*/
-	terminal: "alacritty";
+	terminal: "kitty";
 	font: "Mono 12";
 	sort: false;
 	threads: 0;
@@ -109,6 +110,12 @@ configuration {
     timeout {
       action: "kb-cancel";
       delay:  0;
+    }
+    calc {
+      automatic-save-to-history: true;
+      calc-command-history: true;
+      hint-result: "Result: ";
+      hint-welcome: "Calculate";
     }
 
 	/*---------- Keybindings ----------*/

@@ -45,6 +45,9 @@ return {
     -- customize language server configuration options passed to `lspconfig`
     ---@diagnostic disable: missing-fields
     config = {
+      oxlint = {
+        workspace_required = false,
+      },
       pyright = {
         settings = {
           pyright = { autoImportCompletion = true, openFilesOnly = true },

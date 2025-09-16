@@ -32,7 +32,7 @@ export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export AMD_VULKAN_ICD=RADV
 export EDITOR=nvim
 export VISUAL=nvim
-export BROWSER=chromium
+export BROWSER=zen-browser
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
@@ -42,7 +42,7 @@ export PIPENV_VENV_IN_PROJECT=1 # https://pipenv.pypa.io/en/latest/install/#virt
 export BORG_PASSCOMMAND='secret-tool lookup service borg'
 export PYTHONPATH=.
 export PASTETIME=5
-export GTK_THEME=""
+# export GTK_THEME="Arc-Dark"
 PATH=$PATH:/opt/anaconda/bin/
 PATH=$PATH:$GOPATH/bin
 PATH=$PATH:/home/nux/.local/share/npm/bin
@@ -51,6 +51,6 @@ PATH=$PATH:/home/nux/.local/share/npm/bin
 export DOTNET_CLI_HOME="$XDG_DATA_HOME"/dotnet
 export PARALLEL_HOME="$XDG_CONFIG_HOME"/parallel
 export WAKATIME_HOME="$XDG_CONFIG_HOME"/wakatime
-
-
-. "$HOME/.local/share/cargo/env"
+export ZK_NOTEBOOK_DIR="/home/nux/Obsidian Vaults/Nux"
+export VALE_CONFIG_PATH="/home/nux/.config/vale/vale.ini"
+# . "$HOME/.local/share/cargo/env"
