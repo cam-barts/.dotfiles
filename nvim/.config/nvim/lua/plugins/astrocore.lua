@@ -33,6 +33,7 @@ return {
         signcolumn = "yes", -- sets vim.opt.signcolumn to yes
         wrap = false, -- sets vim.opt.wrap
         colorcolumn = "88",
+        conceallevel = 0,
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
@@ -58,6 +59,7 @@ return {
         ["<Leader>fo"] = {"<cmd>ObsidianQuickSwitch<cr>", desc = "Obsidian Quick Switcher"}, -- requires obsidian.nvim
         ["<Leader>fq"] = {"<cmd>lua require('telescope.builtin').quickfix()<cr>", desc="QuickFix List"},
         ["<Leader>e"] = { "<cmd>Neotree right toggle<cr>", desc = "Toggle Explorer to the right" },
+        ["\\"] = false, -- Disable default horizontal split mapping
 
         -- mappings seen under group name "Buffer"
         ["<Leader>bd"] = {

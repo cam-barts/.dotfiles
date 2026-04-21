@@ -5,6 +5,8 @@
 
 ---@type LazySpec
 return {
+  { "nvimtools/none-ls.nvim", enabled = false },
+  { "jay-babu/mason-null-ls.nvim", enabled = false },
   { "wakatime/vim-wakatime", lazy = false },
   {
     "nvim-neo-tree/neo-tree.nvim",
@@ -121,10 +123,10 @@ return {
         vim.fn.jobstart({"xdg-open", url})  -- linux
       end,
       attachments ={
-        img_folder = "00 Admin/02 Meta/_attachments",
+        img_folder = "_/Meta/_attachments",
       },
       templates ={
-        subdir = "00 Admin/02 Meta/_templates",
+        subdir = "_/Meta/_templates",
       },
       disable_frontmatter = true,
       workspaces = {
