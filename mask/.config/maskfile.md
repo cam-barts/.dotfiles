@@ -73,7 +73,7 @@ ntfy publish -t "Borg Backup Completed" -p 4 --tags=backup,floppy_disk,star2,whi
 > Pull new images and clean up system 
 
 ~~~sh
-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower --run-once
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/nicholas-fedor/watchtower:latest --run-once
 docker system prune -a
 ~~~
 
@@ -173,7 +173,7 @@ whisper "$filename" -f txt --model medium.en
 > Edit the Global Maskfile
 
 ~~~sh
-xdg-open "obsidian://adv-uri?vault=Nux&filepath=60%20Interests%2F63%20Configs%2FGlobal%20Maskfile.md"
+xdg-open "obsidian://adv-uri?vault=Nux&filepath=Atlas%2FZ%2FHomelab%20and%20Tech%2FConfigs%2FGlobal%20Maskfile.md&heading=Global%20Maskfile"
 ~~~
 
 ## hoarder

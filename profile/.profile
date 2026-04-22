@@ -51,6 +51,6 @@ PATH=$PATH:/home/nux/.local/share/npm/bin
 export DOTNET_CLI_HOME="$XDG_DATA_HOME"/dotnet
 export PARALLEL_HOME="$XDG_CONFIG_HOME"/parallel
 export WAKATIME_HOME="$XDG_CONFIG_HOME"/wakatime
-export ZK_NOTEBOOK_DIR="/home/nux/Obsidian Vaults/Nux"
+export ZK_NOTEBOOK_DIR="/home/nux/silverbullet"
 export VALE_CONFIG_PATH="/home/nux/.config/vale/vale.ini"
 # . "$HOME/.local/share/cargo/env"
