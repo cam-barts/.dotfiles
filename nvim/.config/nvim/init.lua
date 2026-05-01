@@ -53,7 +53,8 @@ vim.diagnostic.config {
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 vim.keymap.set("t", "<Esc><Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode" })
-
+vim.keymap.set({ "n", "v" }, "<C-s>", "<cmd>w<CR>", { desc = "Save Buffer" })
+vim.keymap.set("i", "<C-s>", "<Esc><cmd>w<CR>", { desc = "Save Buffer" })
 -- Disable arrow keys (get gud nerd)
 vim.keymap.set("n", "<up>", "<nop>", { desc = "Get Gud Nerd" })
 vim.keymap.set("n", "<down>", "<nop>", { desc = "Get Gud Nerd" })
@@ -292,19 +293,6 @@ require("lazy").setup({
         end,
       })
 
-      -- Fuzzy search in current buffer
-      vim.keymap.set(
-        "n",
-        "<leader>/",
-        function()
-          builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown {
-            winblend = 10,
-            previewer = false,
-          })
-        end,
-        { desc = "[/] Fuzzily search in current buffer" }
-      )
-
       -- Live grep in open files
       vim.keymap.set(
         "n",
@@ -419,24 +407,19 @@ require("lazy").setup({
       -- Server configurations
       ---@type table<string, vim.lsp.Config>
       local servers = {
-        -- Pyright (ported from astrolsp)
         pyright = {
           settings = {
-            pyright = {
-              autoImportCompletion = true,
-              openFilesOnly = true,
-            },
+            pyright = { disableOrganizeImports = true },
             python = {
               analysis = {
-                autoSearchPaths = true,
-                diagnosticMode = "openFilesOnly",
-                useLibraryCodeForTypes = true,
-                typeCheckingMode = "off",
-                venvPath = ".venv",
+                typeCheckingMode = "basic",
+                ignore = { "*" },
               },
             },
           },
         },
+
+        ruff = {},
 
         -- Oxlint (ported from astrolsp)
         oxlint = {
@@ -523,8 +506,7 @@ require("lazy").setup({
         lsp_format = "fallback",
       },
       formatters_by_ft = {
-        -- Add formatters per filetype as needed
-        -- python = { 'black', 'isort' },
+        python = { "ruff_format" },
       },
     },
   },
@@ -802,13 +784,21 @@ require("lazy").setup({
   {
     "numToStr/Comment.nvim",
     event = { "BufReadPre", "BufNewFile" },
-    opts = {
-      pre_hook = function(ctx)
-        -- Use ts-context-commentstring for JSX/TSX etc.
-        local ok, integration = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
-        if ok then return integration.create_pre_hook()(ctx) end
-      end,
-    },
+    config = function()
+      require("Comment").setup {
+        pre_hook = function(ctx)
+          local ok, integration = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
+          if ok then return integration.create_pre_hook()(ctx) end
+        end,
+      }
+      local api = require "Comment.api"
+      vim.keymap.set("n", "<leader>/", api.toggle.linewise.current, { desc = "Toggle comment line" })
+      vim.keymap.set("x", "<leader>/", function()
+        local esc = vim.api.nvim_replace_termcodes("<ESC>", true, false, true)
+        vim.api.nvim_feedkeys(esc, "nx", false)
+        api.toggle.linewise(vim.fn.visualmode())
+      end, { desc = "Toggle comment" })
+    end,
   },
 
   -- ============================================================
@@ -951,6 +941,7 @@ require("lazy").setup({
       { "<leader>e", "<cmd>Neotree right toggle<cr>", desc = "Toggle Explorer (right)", silent = true },
     },
     opts = {
+      window = { position = "right" },
       filesystem = {
         filtered_items = {
           hide_dotfiles = false,
@@ -965,6 +956,50 @@ require("lazy").setup({
         },
       },
     },
+  },
+
+  -- zk setup
+  {
+    "zk-org/zk-nvim",
+    name = "zk",
+    opts = {
+      -- Can be "telescope", "fzf", "fzf_lua", "minipick", "snacks_picker",
+      -- or select" (`vim.ui.select`).
+      picker = "telescope",
+
+      lsp = {
+        -- `config` is passed to `vim.lsp.start(config)`
+        config = {
+          name = "zk",
+          cmd = { "zk", "lsp" },
+          filetypes = { "markdown" },
+          -- on_attach = ...
+          -- etc, see `:h vim.lsp.start()`
+        },
+
+        -- automatically attach buffers in a zk notebook that match the given filetypes
+        auto_attach = {
+          enabled = true,
+        },
+      },
+    },
+    config = function(_, opts)
+      require("zk").setup(opts)
+      local tp = require("zk.pickers.telescope")
+      tp.note_picker_list_api_selection = { "title", "absPath", "path", "filenameStem" }
+      tp.create_note_entry_maker = function(_)
+        return function(note)
+          local display = note.filenameStem or note.title or note.path
+          return {
+            value = note,
+            path = note.absPath,
+            display = display,
+            ordinal = display,
+            text = display,
+          }
+        end
+      end
+    end,
   },
 
   -- ============================================================

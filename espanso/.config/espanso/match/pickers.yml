@@ -1,0 +1,64 @@
+# URL and page pickers
+# Backing scripts live in $CONFIG/scripts/
+
+matches:
+
+  # Pick a short URL from tldr.cam (Kutt)
+  # API key pulled from Bitwarden at runtime
+  - trigger: ";;tldr"
+    replace: "{{form1.picked}}"
+    vars:
+      - name: links
+        type: shell
+        params:
+          cmd: "export PATH=$HOME/.local/bin:$PATH && uv run $CONFIG/scripts/pick_tldr.py"
+      - name: form1
+        type: form
+        params:
+          layout: |
+            [[picked]]
+          fields:
+            picked:
+              type: list
+              values: "{{links}}"
+
+  # Pick a SilverBullet page via zk
+  - trigger: ";;sb"
+    replace: "{{form1.picked}}"
+    vars:
+      - name: pages
+        type: shell
+        params:
+          cmd: "export PATH=$HOME/.local/bin:$PATH && uv run $CONFIG/scripts/pick_sb.py"
+      - name: form1
+        type: form
+        params:
+          layout: |
+            [[picked]]
+          fields:
+            picked:
+              type: list
+              values: "{{pages}}"
+
+  # Pick a blog page from the local Quartz repo
+  # Linux-only since the repo doesn't exist on the work machine
+  - trigger: ";;blog"
+    replace: "https://cam-barts.github.io{{url}}"
+    vars:
+      - name: pages
+        type: shell
+        params:
+          cmd: "export PATH=$HOME/.local/bin:$PATH && uv run $CONFIG/scripts/pick_blog.py"
+      - name: form1
+        type: form
+        params:
+          layout: |
+            [[picked]]
+          fields:
+            picked:
+              type: list
+              values: "{{pages}}"
+      - name: url
+        type: shell
+        params:
+          cmd: "python3 -c \"v='{{form1.picked}}'; print(v.split(' → ')[1] if ' → ' in v else v)\""
