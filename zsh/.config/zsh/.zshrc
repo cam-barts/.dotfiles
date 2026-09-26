@@ -178,6 +178,9 @@ if command -v kitty &> /dev/null; then
   alias diff='kitten diff'
 fi
 
+# Alias jrnl to sb for https://github.com/cam-barts/sb-cli#journaling
+alias jrnl='sb daily'
+
 rga-fzf() {
 	RG_PREFIX="rga --files-with-matches"
 	local file
