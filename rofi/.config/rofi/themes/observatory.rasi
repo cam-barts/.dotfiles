@@ -1,0 +1,193 @@
+/**
+ * Observatory — rofi theme
+ *
+ * Ported from the SilverBullet Observatory theme
+ * (see [[Projects/SilverBullet Observatory Refresh]] → Design Tokens).
+ * Tokyo-Night canvas, calm near-white text, warm orange #ffaa00 as the
+ * single focal accent, glassy hairline panels, Space Grotesk + Monaspace Argon.
+ **/
+
+/*****----- Tokens -----*****/
+* {
+    /* Color */
+    canvas:                      #07090d;
+    base:                        #0d0e14;
+    panel:                       #1f2335CC;
+    raised:                      #292e42B3;
+    hair:                        #2a2e428C;
+    hair2:                       #3b4261;
+    txt:                         #c0caf5;
+    body:                        #aeb7e0;
+    muted:                       #9aa5ce;
+    faint:                       #565f89;
+    orange:                      #ffaa00;
+    sorange:                     #ff9e64;
+    cyan:                        #7dcfff;
+    red:                         #f7768e;
+    cta-ink:                     #241400;
+
+    /* Type */
+    font:                        "Space Grotesk 11";
+    mono:                        "Monaspace Argon 9";
+
+    background-color:            transparent;
+    text-color:                  @body;
+}
+
+/*****----- Window (the scrim) -----*****/
+window {
+    transparency:                "real";
+    location:                    center;
+    anchor:                      center;
+    width:                       720px;
+    border:                      1px solid;
+    border-color:                @hair2;
+    border-radius:               14px;
+    background-color:            @canvas;
+    /* warm aurora focal at the top, fading into the canvas */
+    background-image:            linear-gradient(to bottom, #ffaa001F, #ff9e640A, #07090d00);
+    cursor:                      "default";
+}
+
+mainbox {
+    spacing:                     14px;
+    padding:                     22px;
+    children:                    [ "inputbar", "message", "listview", "mode-switcher" ];
+}
+
+/*****----- Inputbar -----*****/
+inputbar {
+    spacing:                     12px;
+    padding:                     12px 16px;
+    border:                      1px solid;
+    border-color:                @hair;
+    border-radius:               12px;
+    background-color:            @panel;
+    children:                    [ "textbox-prompt-colon", "entry", "num-filtered-rows", "textbox-num-sep", "num-rows" ];
+}
+textbox-prompt-colon {
+    expand:                      false;
+    str:                         "";
+    font:                        "Symbols Nerd Font 12";
+    text-color:                  @orange;
+    vertical-align:              0.5;
+}
+entry {
+    text-color:                  @txt;
+    cursor:                      text;
+    placeholder:                 "Search…";
+    placeholder-color:           @faint;
+    vertical-align:              0.5;
+}
+num-filtered-rows, textbox-num-sep, num-rows {
+    expand:                      false;
+    font:                        @mono;
+    text-color:                  @faint;
+    vertical-align:              0.5;
+}
+textbox-num-sep {
+    str:                         "/";
+}
+
+/*****----- Listview -----*****/
+listview {
+    columns:                     1;
+    lines:                       8;
+    cycle:                       true;
+    dynamic:                     true;
+    scrollbar:                   false;
+    fixed-height:                true;
+    spacing:                     2px;
+    padding:                     2px 0px;
+}
+
+element {
+    spacing:                     12px;
+    padding:                     8px 12px;
+    border:                      0px 0px 0px 2px;
+    border-color:                transparent;
+    border-radius:               8px;
+    cursor:                      pointer;
+}
+element normal.normal, element alternate.normal {
+    background-color:            transparent;
+    text-color:                  @muted;
+}
+element normal.active, element alternate.active {
+    background-color:            transparent;
+    text-color:                  @cyan;
+}
+element normal.urgent, element alternate.urgent {
+    background-color:            transparent;
+    text-color:                  @red;
+}
+element selected.normal {
+    background-color:            @raised;
+    border-color:                @orange;
+    text-color:                  @txt;
+}
+element selected.active {
+    background-color:            @raised;
+    border-color:                @orange;
+    text-color:                  @cyan;
+}
+element selected.urgent {
+    background-color:            @raised;
+    border-color:                @red;
+    text-color:                  @red;
+}
+element-icon {
+    size:                        22px;
+    cursor:                      inherit;
+}
+element-text {
+    text-color:                  inherit;
+    highlight:                   bold #ffaa00;
+    vertical-align:              0.5;
+    cursor:                      inherit;
+}
+
+/*****----- Mode switcher (the CTA pill) -----*****/
+mode-switcher {
+    expand:                      false;
+    spacing:                     5px;
+}
+button {
+    padding:                     6px 6px;
+    font:                        "Space Grotesk 10";
+    border:                      1px solid;
+    border-color:                @hair;
+    border-radius:               999px;
+    background-color:            transparent;
+    text-color:                  @faint;
+    cursor:                      pointer;
+}
+button selected {
+    border-color:                @orange;
+    background-color:            @orange;
+    background-image:            linear-gradient(to right, #ffc94d, #ffaa00, #ff9e64);
+    text-color:                  @cta-ink;
+}
+
+/*****----- Messages -----*****/
+message {
+    padding:                     0px;
+}
+textbox {
+    padding:                     10px 14px;
+    border:                      1px solid;
+    border-color:                @hair;
+    border-radius:               12px;
+    background-color:            @panel;
+    text-color:                  @muted;
+    markup:                      true;
+    vertical-align:              0.5;
+}
+error-message {
+    padding:                     14px;
+    border:                      1px solid;
+    border-color:                @red;
+    border-radius:               14px;
+    background-color:            #0d0e14F0;
+    text-color:                  @txt;
+}

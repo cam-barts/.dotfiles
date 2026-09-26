@@ -6,17 +6,11 @@
  * Configuration For Rofi Version: 1.7.3
  **/
 
-@theme "launchers/type-1/style-7.rasi"
-
-* {
-	selected: rgba ( 255, 13, 138, 100 % );
-	active: rgba ( 40, 216, 219, 100 % );
-	selected-active-background: rgba ( 93, 79, 186, 100 % );
-}
+@theme "themes/observatory.rasi"
 
 configuration {
 	/*---------- General setting ----------*/
-	modes: "combi,window,Hoarder:/home/nux/.local/bin/rofi_bookmarks_dmenu.sh,calc,drun,run,filebrowser,ssh,Emoji:/usr/bin/rofimoji";
+	modes: "combi,window,calc,drun,run,filebrowser,ssh,Emoji:/usr/bin/rofimoji";
 	case-sensitive: false;
 	cycle: true;
 	filter: "";
@@ -66,11 +60,11 @@ configuration {
 	/*---------- Window switcher settings ----------*/
 	window-match-fields: "title,class,role,name,desktop";
 	window-command: "wmctrl -i -R {window}";
-	window-format: "{w} - {c} - {t:0}";
+	window-format: "{c}  ·  {t:0}";
 	window-thumbnail: false;
 
 	/*---------- Combi settings ----------*/
-    combi-modi: "window,drun,Hoarder";
+    combi-modi: "window,drun";
 /*	combi-hide-mode-prefix: false;*/
 /*	combi-display-format: "{mode} {text}";*/
 
@@ -85,7 +79,7 @@ configuration {
 	display-run: "Run";
 	display-ssh: "SSH";
 	display-drun: "Apps";
-	display-combi: "Combi";
+	display-combi: "All";
 	display-keys: "Keys";
 	display-filebrowser: "Files";
 	display-calc: "Calc";
