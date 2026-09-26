@@ -1,3 +1,8 @@
+# Don't stat through symlinks: ~/git -> /mnt/d/git is ntfs-3g (fuseblk) on the
+# same spindle as /home, so following it cost a FUSE round-trip every prompt and
+# blew the 30ms scan_timeout in ~. Upstream recommends this for slow-fs symlinks.
+follow_symlinks = false
+
 ## FIRST LINE/ROW: Info & Status
 # First param ─┌
 [username]
