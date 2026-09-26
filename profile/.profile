@@ -46,6 +46,9 @@ export PASTETIME=5
 PATH=$PATH:/opt/anaconda/bin/
 PATH=$PATH:$GOPATH/bin
 PATH=$PATH:/home/nux/.local/share/npm/bin
+# Mason-installed language servers (lua-language-server, pyright, ...) for
+# Claude Code's LSP plugins. Appended so system tools keep precedence.
+PATH=$PATH:$XDG_DATA_HOME/nvim/mason/bin
 
 # -- XDG-Ninja 20241021 --
 export DOTNET_CLI_HOME="$XDG_DATA_HOME"/dotnet
