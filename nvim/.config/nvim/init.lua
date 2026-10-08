@@ -468,6 +468,7 @@ require("lazy").setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         "debugpy", -- Python debug adapter
+        "prettier", -- HTML formatter (conform: html only)
       })
       require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 
@@ -487,7 +488,7 @@ require("lazy").setup({
     cmd = { "ConformInfo" },
     keys = {
       {
-        "<leader>f",
+        "<leader>F",
         function() require("conform").format { async = true } end,
         mode = "",
         desc = "[F]ormat buffer",
@@ -507,6 +508,7 @@ require("lazy").setup({
       },
       formatters_by_ft = {
         python = { "ruff_format" },
+        html = { "prettier" },
       },
     },
   },
@@ -610,8 +612,24 @@ require("lazy").setup({
     },
     config = function(_, opts)
       require("bufferline").setup(opts)
-      -- Buffer close keymap: close current buffer
-      vim.keymap.set("n", "<leader>bd", "<cmd>bdelete<CR>", { desc = "[B]uffer [D]elete" })
+
+      -- Buffer close keymaps.
+      -- Snacks.bufdelete is used instead of :bdelete because it swaps in the
+      -- alternate buffer rather than closing any window showing the victim.
+      -- Left/right go through bufferline so they follow the visible tab order,
+      -- not buffer numbers.
+      local map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc }) end
+      map("<leader>bd", "<cmd>bdelete<CR>", "[B]uffer [D]elete")
+      map("<leader>ba", function() Snacks.bufdelete.all() end, "[B]uffer close [A]ll")
+      map("<leader>bo", function()
+        local visible = {}
+        for _, win in ipairs(vim.api.nvim_list_wins()) do
+          visible[vim.api.nvim_win_get_buf(win)] = true
+        end
+        Snacks.bufdelete { filter = function(buf) return not visible[buf] end }
+      end, "[B]uffer close all except [O]pen")
+      map("<leader>br", "<cmd>BufferLineCloseRight<CR>", "[B]uffer close all to the [R]ight")
+      map("<leader>bl", "<cmd>BufferLineCloseLeft<CR>", "[B]uffer close all to the [L]eft")
     end,
   },
 
@@ -698,6 +716,24 @@ require("lazy").setup({
       statusline.setup { use_icons = vim.g.have_nerd_font }
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function() return "%2l:%-2v" end
+
+      -- Macro recording is invisible here: cmdheight=0 hides nvim's native
+      -- "recording @x" message and mini.statusline has no indicator. A stray
+      -- recording also stops which-key attaching its triggers (it skips
+      -- attach while reg_recording() is set), so <leader> silently goes dead.
+      local section_mode = statusline.section_mode
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_mode = function(args)
+        local mode, mode_hl = section_mode(args)
+        local rec = vim.fn.reg_recording()
+        return rec == "" and mode or (mode .. " REC@" .. rec), mode_hl
+      end
+      vim.api.nvim_create_autocmd({ "RecordingEnter", "RecordingLeave" }, {
+        group = vim.api.nvim_create_augroup("MiniStatuslineRec", { clear = true }),
+        desc = "Refresh statusline so the REC@ indicator appears/clears",
+        -- RecordingLeave fires before reg_recording() clears, hence the schedule
+        callback = function() vim.schedule(function() vim.cmd "redrawstatus" end) end,
+      })
     end,
   },
 
