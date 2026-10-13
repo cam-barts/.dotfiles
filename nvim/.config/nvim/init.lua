@@ -201,6 +201,8 @@ require("lazy").setup({
         { "<leader>d", group = "[D]ebug" },
         { "<leader>x", group = "Trouble" },
         { "<leader>l", group = "[L]SP" },
+        { "<leader>z", group = "[Z]k Notes", mode = { "n", "v" } },
+        { "<leader>zs", group = "[S]ilverBullet (sb cli)" },
         { "gr", group = "LSP Actions", mode = { "n" } },
       },
     },
@@ -1036,6 +1038,37 @@ require("lazy").setup({
           }
         end
       end
+
+      local function map(mode, lhs, rhs, desc) vim.keymap.set(mode, lhs, rhs, { desc = desc }) end
+
+      -- browse / search
+      map("n", "<leader>zn", "<Cmd>ZkNotes { sort = { 'modified' } }<CR>", "[Z]k [N]otes")
+      -- Alias of <leader>zn, in the [F]ind namespace.
+      map("n", "<leader>fz", "<Cmd>ZkNotes { sort = { 'modified' } }<CR>", "[F]ind [Z]k notes")
+      map("n", "<leader>zt", "<Cmd>ZkTags<CR>", "[Z]k [T]ags")
+      map("n", "<leader>zo", "<Cmd>ZkBuffers<CR>", "[Z]k [O]pen buffers")
+      map("n", "<leader>zf", function()
+        local q = vim.fn.input "Search notes: "
+        if q ~= "" then
+          require("zk").edit({ sort = { "modified" }, match = { q } }, { title = "Zk: " .. q })
+        end
+      end, "[Z]k [F]ind by text")
+      map("v", "<leader>zf", ":'<,'>ZkMatch<CR>", "[Z]k [F]ind by selection")
+
+      -- links for the current note
+      map("n", "<leader>zb", "<Cmd>ZkBacklinks<CR>", "[Z]k [B]acklinks (inbound)")
+      map("n", "<leader>zl", "<Cmd>ZkLinks<CR>", "[Z]k [L]inks (outbound)")
+      map("n", "<leader>zi", "<Cmd>ZkInsertLink<CR>", "[Z]k [I]nsert link")
+      map("v", "<leader>zi", ":'<,'>ZkInsertLinkAtSelection<CR>", "[Z]k [I]nsert link for selection")
+
+      -- create
+      map("n", "<leader>zc", "<Cmd>ZkNew { title = vim.fn.input('Title: ') }<CR>", "[Z]k [C]reate note")
+      map("v", "<leader>zc", ":'<,'>ZkNewFromTitleSelection<CR>", "[Z]k [C]reate from selection (title)")
+      map("v", "<leader>zC", ":'<,'>ZkNewFromContentSelection<CR>", "[Z]k [C]reate from selection (content)")
+
+      -- housekeeping
+      map("n", "<leader>zd", "<Cmd>ZkCd<CR>", "[Z]k c[d] to notebook root")
+      map("n", "<leader>zR", "<Cmd>ZkIndex<CR>", "[Z]k [R]eindex notebook")
     end,
   },
 
@@ -1073,5 +1106,235 @@ require("lazy").setup({
     },
   },
 })
+
+-- ============================================================
+-- NOTES: SilverBullet `sb` CLI (shell-outs, there is no plugin)
+-- ============================================================
+-- sb resolves its own space from ~/.config/sb/config.toml, so cwd never matters
+-- here. Only the local mirror path does, for opening files directly.
+-- ponytail: these mirror [sync].dir and [daily].path in that config file. If you
+-- change them there, change them here.
+local sb_dir = vim.fn.expand "~/silverbullet"
+local function sb_daily_file() return sb_dir .. "/Inbox/" .. os.date "%Y-%m-%d" .. ".md" end
+
+local function sb_notify(msg, level) vim.notify(msg, level, { title = "SilverBullet" }) end
+
+-- sb prints this hint only when there really are conflicts, which makes it a
+-- more honest signal than grepping for the word "conflicts" (every "Pull
+-- complete: 0 downloaded, 0 conflicts" line contains that).
+local function sb_level(code, body)
+  if code ~= 0 then
+    return vim.log.levels.ERROR
+  elseif body:find("sb sync conflicts", 1, true) then
+    return vim.log.levels.WARN
+  end
+  return vim.log.levels.INFO
+end
+
+-- Run sb async. Machine output lands on stdout, human summaries on stderr, so
+-- both come back. --no-input because a prompt would hang with nowhere to type.
+local function sb_run(args, on_done)
+  local cmd = vim.list_extend({ "sb", "--no-input", "--no-color" }, args)
+  vim.system(cmd, { text = true }, function(r)
+    local trim = function(t) return vim.trim(t or "") end
+    vim.schedule(function() on_done(r.code, trim(r.stdout), trim(r.stderr)) end)
+  end)
+end
+
+-- Notify with whatever sb had to say.
+local function sb_notify_run(args, label)
+  sb_run(args, function(code, out, err)
+    local body = out ~= "" and out or err
+    sb_notify(label .. "\n" .. (body ~= "" and body or "(no output)"), sb_level(code, body))
+  end)
+end
+
+-- Dump sb output into a throwaway split; `q` closes it.
+local function sb_scratch(args, label)
+  sb_run(args, function(code, out, err)
+    local body = out ~= "" and out or err
+    if body == "" then body = code == 0 and "(no output)" or "failed (exit " .. code .. ")" end
+    vim.cmd "botright new"
+    local buf = vim.api.nvim_get_current_buf()
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(body, "\n"))
+    vim.api.nvim_buf_set_name(buf, "sb://" .. label)
+    vim.bo[buf].buftype = "nofile"
+    vim.bo[buf].filetype = "markdown"
+    vim.bo[buf].modifiable = false
+    vim.wo.wrap = true
+    vim.keymap.set("n", "q", "<Cmd>close<CR>", { buffer = buf, desc = "Close sb output" })
+  end)
+end
+
+-- Fetch JSON from sb and hand the decoded rows to `show`.
+local function sb_json(args, show)
+  sb_run(vim.list_extend({ "--format", "json" }, args), function(code, out, err)
+    local body = out ~= "" and out or err
+    if code ~= 0 then return sb_notify("sb failed\n" .. body, vim.log.levels.ERROR) end
+    local ok, rows = pcall(vim.json.decode, out)
+    if not ok or type(rows) ~= "table" then
+      return sb_notify("Could not read sb output\n" .. body:sub(1, 300), vim.log.levels.ERROR)
+    end
+    if vim.tbl_isempty(rows) then return sb_notify "Nothing to show" end
+    show(rows)
+  end)
+end
+
+-- Open a page from the local mirror, landing on `anchor` text when given.
+local function sb_open(page, anchor)
+  if not page or page == "" then return end
+  local f = sb_dir .. "/" .. page .. ".md"
+  if vim.fn.filereadable(f) == 0 then
+    return sb_notify("Not in the local mirror yet:\n" .. page .. "\n<leader>zss to sync", vim.log.levels.WARN)
+  end
+  vim.cmd.edit(vim.fn.fnameescape(f))
+  if anchor and anchor ~= "" then
+    -- The index stores character offsets while `:goto` counts bytes, so search
+    -- for the text rather than converting. \V makes the pattern literal, and
+    -- strcharpart trims by character so a multibyte tail is never cut in half.
+    local pat = "\\V" .. vim.fn.strcharpart(anchor, 0, 40):gsub("\\", "\\\\")
+    vim.fn.search(pat, "cw")
+  end
+end
+
+-- One telescope picker over sb rows. `make(row)` returns a telescope entry
+-- (display, plus whatever `on_select` needs); `preview` wants entry.path set.
+local function sb_picker(title, rows, make, on_select, preview)
+  local pickers = require "telescope.pickers"
+  local finders = require "telescope.finders"
+  local conf = require("telescope.config").values
+  local actions = require "telescope.actions"
+  local action_state = require "telescope.actions.state"
+  pickers
+    .new({}, {
+      prompt_title = title,
+      finder = finders.new_table {
+        results = rows,
+        entry_maker = function(row)
+          local e = make(row)
+          e.value = row
+          e.ordinal = e.ordinal or e.display
+          return e
+        end,
+      },
+      sorter = conf.generic_sorter {},
+      previewer = preview and conf.file_previewer {} or nil,
+      attach_mappings = function(bufnr)
+        actions.select_default:replace(function()
+          local sel = action_state.get_selected_entry()
+          actions.close(bufnr)
+          if sel then on_select(sel) end
+        end)
+        return true
+      end,
+    })
+    :find()
+end
+
+-- A row's text is wanted two ways: verbatim for the jump, and flattened to one
+-- line for the picker, since an inbox snippet can run to thousands of characters.
+local function sb_text(raw)
+  raw = raw or ""
+  local literal = vim.trim((raw:gsub("\n.*", ""))) -- must still match the page byte for byte
+  local flat = vim.trim((raw:gsub("%s+", " ")))
+  return literal, flat
+end
+
+-- Build a picker entry for a page, with an optional position to land on. The
+-- ordinal keeps more text than the display so fuzzy search still reaches words
+-- past the visible cut.
+local function sb_entry(page, raw)
+  local literal, flat = sb_text(raw)
+  -- A page row carries no text of its own, so it gets no separator.
+  local tail = flat ~= "" and ("  |  " .. vim.fn.strcharpart(flat, 0, 140)) or ""
+  return {
+    display = page .. tail,
+    ordinal = page .. " " .. vim.fn.strcharpart(flat, 0, 400),
+    path = sb_dir .. "/" .. page .. ".md",
+    sb_page = page,
+    sb_anchor = literal ~= "" and literal or nil,
+  }
+end
+
+-- Index rows come in two shapes: page-tagged objects carry `name` and no `pos`,
+-- data-tagged ones (highlight, task, ...) carry `page`, `text` and `pos`.
+local function sb_row_entry(row)
+  local page = row.page or row.name or (row.ref or ""):gsub("@%d+$", "")
+  -- A page row *is* its page, so there is nothing within it to jump to.
+  return sb_entry(page, row.page and (row.text or row.name) or nil)
+end
+
+local function sb_open_entry(sel) sb_open(sel.sb_page, sel.sb_anchor) end
+
+-- Every object the server has indexed under one tag.
+local function sb_objects(tag)
+  sb_notify("Loading " .. tag .. "...")
+  -- No `limit`: the biggest tags here are ~5.6k rows and come back in about a
+  -- second, and any cap would silently hide the overflow.
+  sb_json({ "query", ('from index.tag "%s"'):format(tag) }, function(rows)
+    sb_picker("sb: " .. tag .. " (" .. #rows .. ")", rows, sb_row_entry, sb_open_entry, true)
+  end)
+end
+
+local function sb_sync()
+  -- Push uploads what is on disk, so an unsaved buffer would be quietly skipped.
+  if vim.bo.modified and vim.api.nvim_buf_get_name(0):find(sb_dir, 1, true) == 1 then vim.cmd "update" end
+  sb_notify "Syncing..."
+  sb_notify_run({ "sync" }, "Sync")
+end
+
+local function sbmap(lhs, rhs, desc) vim.keymap.set("n", "<leader>zs" .. lhs, rhs, { desc = desc }) end
+
+sbmap("s", sb_sync, "[S]ync (pull + push)")
+sbmap(
+  "n",
+  function() sb_scratch({ "--format", "human", "sync", "--dry-run" }, "sync preview") end,
+  "Sync preview (dry-ru[n])"
+)
+sbmap("t", function() sb_notify_run({ "--format", "human", "sync", "status" }, "Sync status") end, "Sync s[t]atus")
+sbmap("c", function() sb_scratch({ "--format", "human", "sync", "conflicts" }, "conflicts") end, "[C]onflicts")
+sbmap("i", function()
+  sb_notify "Loading inbox..."
+  sb_json({ "inbox" }, function(rows)
+    sb_picker(
+      "sb inbox (" .. #rows .. ")",
+      rows,
+      function(row) return sb_entry(row.page or "", row.snippet) end,
+      sb_open_entry,
+      true
+    )
+  end)
+end, "[I]nbox (@mentions)")
+sbmap("o", function()
+  sb_notify "Loading tags..."
+  -- `sb describe` lists every indexed tag with its row count, biggest first.
+  sb_json({ "describe" }, function(tags)
+    -- `count` is how many pages carry the tag, not how many objects it has:
+    -- `highlight` reads 432 here and returns 5621 rows when queried.
+    sb_picker("sb indexed tags (" .. #tags .. ") -- count = pages", tags, function(t)
+      return {
+        display = ("%6d  %-34s %s"):format(t.count or 0, t.name or "?", t.parents or ""),
+        ordinal = t.name or "",
+      }
+    end, function(sel) sb_objects(sel.value.name) end, false)
+  end)
+end, "Indexed [o]bjects by tag")
+sbmap("h", function() sb_objects "highlight" end, "[H]ighlights")
+sbmap("l", function()
+  vim.ui.input({ prompt = "Daily log entry: " }, function(text)
+    if not text or vim.trim(text) == "" then return end
+    -- `--` so an entry starting with `-` is not read as a flag.
+    sb_run({ "daily", "--", text }, function(code, out, err)
+      local body = err ~= "" and err or out
+      sb_notify(code == 0 and ("Logged: " .. text) or ("Log failed\n" .. body), sb_level(code, body))
+    end)
+  end)
+end, "[L]og entry to today's note")
+sbmap("d", function()
+  local f = sb_daily_file()
+  -- A fresh entry written by `sb daily` lives on the server until the next pull.
+  if vim.fn.filereadable(f) == 0 then sb_notify("No local copy yet, <leader>zss to sync", vim.log.levels.WARN) end
+  vim.cmd.edit(f)
+end, "Open to[d]ay's daily note")
 
 -- vim: ts=2 sts=2 sw=2 et
