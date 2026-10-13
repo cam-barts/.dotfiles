@@ -46,7 +46,7 @@ vim.diagnostic.config {
   underline = true,
   virtual_text = true,
   virtual_lines = false,
-  jump = { float = true },
+  jump = { on_jump = function(_, bufnr) vim.diagnostic.open_float { bufnr = bufnr, scope = "cursor" } end },
 }
 
 -- [[ Basic Keymaps ]]
@@ -591,7 +591,7 @@ require("lazy").setup({
   -- UI: nvim-colorizer (color hex codes inline)
   -- ============================================================
   {
-    "norcalli/nvim-colorizer.lua",
+    "catgoose/nvim-colorizer.lua",
     event = "BufReadPre",
     opts = {},
   },
@@ -762,6 +762,7 @@ require("lazy").setup({
         "markdown_inline",
         "python",
         "query",
+        "regex",
         "tsx",
         "typescript",
         "vim",
