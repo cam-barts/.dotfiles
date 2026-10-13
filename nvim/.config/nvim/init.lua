@@ -17,6 +17,14 @@ vim.o.relativenumber = true
 vim.o.mouse = "a"
 vim.o.showmode = false
 vim.o.breakindent = true
+-- guess-indent overrides these per file. They only bite when a file has no
+-- indentation to detect (new, or all on one line) and no ftplugin opinion --
+-- json, markdown, yaml and html all land here, and the vim defaults there are
+-- 8-wide hard tabs, which also made conform's jq write 7-space indents.
+vim.o.expandtab = true
+vim.o.shiftwidth = 2
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
 vim.o.undofile = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -343,7 +351,14 @@ require("lazy").setup({
           map("<leader>lr", vim.lsp.buf.rename, "[L]SP [R]ename")
           map("<leader>lf", function() vim.lsp.buf.format { async = true } end, "[L]SP [F]ormat")
           map("<leader>ld", vim.diagnostic.open_float, "[L]SP [D]iagnostic float")
-          map("<leader>li", "<cmd>LspInfo<cr>", "[L]SP [I]nfo")
+          map("<leader>li", "<cmd>checkhealth vim.lsp<cr>", "[L]SP [I]nfo")
+          -- `:lsp restart` respawns the server but never re-sends didOpen for an
+          -- already-open buffer, so the new process sits idle behind the dead
+          -- client's diagnostics. The `:edit` is what makes the reload visible.
+          map("<leader>lR", function()
+            vim.cmd "lsp restart"
+            vim.schedule(function() vim.cmd "edit" end)
+          end, "[L]SP [R]eload (restart + reattach)")
           map("<leader>lS", require("telescope.builtin").lsp_document_symbols, "[L]SP Document [S]ymbols")
           map("<leader>ls", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[L]SP Workspace [s]ymbols")
 
@@ -428,6 +443,20 @@ require("lazy").setup({
           workspace_required = false,
         },
 
+        vtsls = {},
+
+        jsonls = {},
+
+        -- Live markdown diagnostics, from the same binary and the same
+        -- rumdl.toml that <leader>F formats with, so what is underlined is
+        -- exactly what a format would change.
+        rumdl = {
+          -- lspconfig only looks for `.git` here, and the SilverBullet space is
+          -- not a repo. Without a root the server runs single-file and never
+          -- reads rumdl.toml -- it would flag the very rules the space disables.
+          root_markers = { "rumdl.toml", ".rumdl.toml", ".git" },
+        },
+
         stylua = {}, -- Lua formatter
 
         -- Lua LS (kickstart default config)
@@ -471,6 +500,7 @@ require("lazy").setup({
       vim.list_extend(ensure_installed, {
         "debugpy", -- Python debug adapter
         "prettier", -- HTML formatter (conform: html only)
+        "jq", -- JSON formatter (conform)
       })
       require("mason-tool-installer").setup { ensure_installed = ensure_installed }
 
@@ -486,7 +516,6 @@ require("lazy").setup({
   -- ============================================================
   {
     "stevearc/conform.nvim",
-    event = { "BufWritePre" },
     cmd = { "ConformInfo" },
     keys = {
       {
@@ -500,18 +529,23 @@ require("lazy").setup({
     ---@type conform.setupOpts
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Ported from astrolsp: format on save is enabled globally.
-        -- Customize per-filetype here if needed.
-        return { timeout_ms = 1000, lsp_format = "fallback" }
-      end,
+      -- Deliberately no format_on_save: formatting happens when <leader>F asks
+      -- for it. Add `format_on_save = { timeout_ms = 1000, lsp_format = "fallback" }`
+      -- here, or a function returning it for chosen filetypes, to go back.
       default_format_opts = {
         lsp_format = "fallback",
       },
       formatters_by_ft = {
         python = { "ruff_format" },
         html = { "prettier" },
+        markdown = { "rumdl" },
+        json = { "jq" },
       },
+      -- rumdl runs with its default rules here, and with whatever
+      -- ~/silverbullet/rumdl.toml says for notes in the space. Discovery walks
+      -- up from the file's own path, not nvim's cwd, so the space config applies
+      -- wherever nvim was started. Do not pass --enable/--disable on the command
+      -- line: those outrank every config file and would flatten the distinction.
     },
   },
 
@@ -541,7 +575,7 @@ require("lazy").setup({
       completion = {
         documentation = { auto_show = false, auto_show_delay_ms = 500 },
       },
-      sources = { default = { "lsp", "path", "snippets" } },
+      sources = { default = { "lsp", "path", "snippets", "buffer" } },
       snippets = { preset = "luasnip" },
       fuzzy = { implementation = "lua" },
       signature = { enabled = true },
@@ -582,8 +616,6 @@ require("lazy").setup({
         long_message_to_split = true,
         command_palette = true,
       },
-      -- Use telescope, not fzf-lua
-      picker = "telescope",
     },
   },
 
@@ -621,7 +653,7 @@ require("lazy").setup({
       -- Left/right go through bufferline so they follow the visible tab order,
       -- not buffer numbers.
       local map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc }) end
-      map("<leader>bd", "<cmd>bdelete<CR>", "[B]uffer [D]elete")
+      map("<leader>bd", function() Snacks.bufdelete() end, "[B]uffer [D]elete")
       map("<leader>ba", function() Snacks.bufdelete.all() end, "[B]uffer close [A]ll")
       map("<leader>bo", function()
         local visible = {}
@@ -778,7 +810,7 @@ require("lazy").setup({
         if not vim.treesitter.language.add(language) then return end
         vim.treesitter.start(buf, language)
         local has_indent_query = vim.treesitter.query.get(language, "indents") ~= nil
-        if has_indent_query then vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()" end
+        if has_indent_query then vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()" end
       end
 
       local available_parsers = require("nvim-treesitter").get_available()
@@ -891,8 +923,6 @@ require("lazy").setup({
     dependencies = {
       "rcarriga/nvim-dap-ui",
       "nvim-neotest/nvim-nio",
-      "mason-org/mason.nvim",
-      "jay-babu/mason-nvim-dap.nvim",
       "mfussenegger/nvim-dap-python",
     },
     keys = {
@@ -911,12 +941,6 @@ require("lazy").setup({
     config = function()
       local dap = require "dap"
       local dapui = require "dapui"
-
-      require("mason-nvim-dap").setup {
-        automatic_installation = true,
-        handlers = {},
-        ensure_installed = { "debugpy" },
-      }
 
       ---@diagnostic disable-next-line: missing-fields
       dapui.setup {
@@ -941,11 +965,10 @@ require("lazy").setup({
       dap.listeners.before.event_terminated["dapui_config"] = dapui.close
       dap.listeners.before.event_exited["dapui_config"] = dapui.close
 
-      -- Python debugger setup via nvim-dap-python
-      -- Uses debugpy; will look for python in .venv or system path
-      local python_path = vim.fn.getcwd() .. "/.venv/bin/python"
-      if vim.fn.executable(python_path) ~= 1 then python_path = "python3" end
-      require("dap-python").setup(python_path)
+      -- `debugpy-adapter` is Mason's shim, so the adapter always has debugpy.
+      -- The debuggee's interpreter is separate: dap-python resolves it per session
+      -- from $VIRTUAL_ENV, else venv/.venv/env/.env upward from the file.
+      require("dap-python").setup "debugpy-adapter"
     end,
   },
 
@@ -956,7 +979,7 @@ require("lazy").setup({
     "akinsho/toggleterm.nvim",
     version = "*",
     keys = {
-      { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "[T]oggle [T]erminal", mode = { "n", "t" } },
+      { "<leader>tt", "<cmd>ToggleTerm<cr>", desc = "[T]oggle [T]erminal" },
     },
     opts = {
       open_mapping = false, -- We use our own keymap above
@@ -976,7 +999,6 @@ require("lazy").setup({
       "nvim-tree/nvim-web-devicons",
       "MunifTanjim/nui.nvim",
     },
-    lazy = false,
     keys = {
       { "<leader>e", "<cmd>Neotree right toggle<cr>", desc = "Toggle Explorer (right)", silent = true },
     },
@@ -1101,7 +1123,6 @@ require("lazy").setup({
         "gzip",
         "netrwPlugin",
         "tarPlugin",
-        "tohtml",
         "zipPlugin",
       },
     },
