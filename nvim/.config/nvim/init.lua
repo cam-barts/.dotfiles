@@ -679,17 +679,42 @@ require("lazy").setup({
         enabled = true,
         preset = {
           header = [[
-   _____ __         __  __          _
-  / ___// /______  / /_/ /_  ___  (_)___  _____
-  \__ \/ __/ ___/ / __/ __ \/ _ \/ / __ \/ ___/
- ___/ / /_/ /    / /_/ / / /  __/ / / / (__  )
-/____/\__/_/     \__/_/ /_/\___/_/_/ /_/____/
+⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⠤⠶⠒⠒⠛⠛⠓⠒⠶⠦⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢀⡴⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢷⡄⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢠⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⡄⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣸⠀⡦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡄⣿⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢸⠀⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⠃⣿⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⣇⢸⡆⢀⣀⣀⣤⡀⠀⠀⢀⣤⣄⣀⡀⠀⡟⢠⡏⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠙⣾⠁⣿⣿⣿⣿⡟⠀⠀⠸⣿⣿⣿⣿⠆⣿⠏⠀⠀⠀⠀⠀⠀
+⠀⢠⡟⢳⡄⠀⠀⣿⠀⠙⢿⣿⠟⠀⣠⢀⠀⠙⢿⣿⠟⠀⢸⠀⠀⢀⡞⠛⡆⠀
+⢠⠞⠁⠀⠙⠶⣤⣹⣄⡀⠀⠀⠀⢸⣿⢸⣧⠀⠀⠀⢀⣠⣞⣠⠴⠛⠀⠀⠳⣄
+⠙⠶⠶⠲⢦⣄⡀⠉⠛⣿⡷⣦⠀⠸⠋⠘⠟⠀⢠⢾⣻⠟⠉⢀⣀⡤⠖⠲⠶⠛
+⠀⠀⠀⠀⠀⠈⠙⠳⢦⣼⠽⢸⠂⠤⡤⡤⢤⢰⠋⡎⣿⡴⠞⠋⠁⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⣀⣤⢾⡀⠾⣉⡒⡗⡗⢺⢸⡵⠃⡿⢤⣀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⣴⠖⠶⠶⠚⠉⢀⣨⣷⡀⠀⠉⠉⠉⠉⠀⢀⣼⣇⡀⠈⠛⠲⠶⠶⢦⡀⠀
+⠀⠀⠙⢦⠀⠀⣤⠞⠋⠁⠀⠙⠳⠶⠤⠤⠶⠖⠋⠁⠀⠉⠳⢦⡀⠀⣴⠋⠀⠀
+⠀⠀⠀⠸⣤⡾⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠳⣤⡏⠀⠀⠀
+
+
+There is no justice in following unjust laws. 
+
+It's time to come into the light and,
+in the grand tradition of civil disobedience, 
+declare our opposition to this private theft of public
+culture.
+
+"Hoist The Colors"
+
+
           ]],
           keys = {
             { icon = " ", key = "f", desc = "Find File", action = ':lua require("telescope.builtin").find_files()' },
             { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
             { icon = " ", key = "g", desc = "Find Text", action = ':lua require("telescope.builtin").live_grep()' },
             { icon = " ", key = "r", desc = "Recent Files", action = ':lua require("telescope.builtin").oldfiles()' },
+            -- Same list as <leader>zn. Works from any cwd because ~/.profile
+            -- exports ZK_NOTEBOOK_DIR, so zk does not need to be inside the space.
+            { icon = " ", key = "z", desc = "Zk Notes", action = ":ZkNotes { sort = { 'modified' } }" },
             { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
             { icon = " ", key = "q", desc = "Quit", action = ":qa" },
           },
