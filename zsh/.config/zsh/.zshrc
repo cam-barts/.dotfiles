@@ -179,7 +179,7 @@ if command -v kitty &> /dev/null; then
 fi
 
 # Alias jrnl to sb for https://github.com/cam-barts/sb-cli#journaling
-alias jrnl='sb daily'
+alias jrnl='sb daily --sign @cam'
 
 rga-fzf() {
 	RG_PREFIX="rga --files-with-matches"
