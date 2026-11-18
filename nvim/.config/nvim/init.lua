@@ -46,6 +46,17 @@ vim.o.conceallevel = 0
 -- Sync clipboard after UiEnter to avoid slow startup
 vim.schedule(function() vim.o.clipboard = "unnamedplus" end)
 
+-- Copy via OSC 52 so yanks reach the clipboard of whatever terminal is attached
+-- (herdr forwards it over SSH). Paste reads nvim's own register; paste from the
+-- outer machine with the terminal's paste key.
+local osc52 = require "vim.ui.clipboard.osc52"
+local function paste() return { vim.fn.split(vim.fn.getreg "", "\n"), vim.fn.getregtype "" } end
+vim.g.clipboard = {
+  name = "OSC 52",
+  copy = { ["+"] = osc52.copy "+", ["*"] = osc52.copy "*" },
+  paste = { ["+"] = paste, ["*"] = paste },
+}
+
 -- [[ Diagnostics ]]
 vim.diagnostic.config {
   update_in_insert = false,
