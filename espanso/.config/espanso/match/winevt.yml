@@ -1,0 +1,295 @@
+# Windows Event Log snippets (HTB Academy module 216 + AskDS "Advanced XML filtering")
+# ;;evt   -> labelled picker of event IDs (also findable via the ;;; search bar)
+# ;;xq.*  -> QueryList / XPath builders for Event Viewer "Edit query manually"
+# Linux-side expansion only; inside an RDP session the CTRL+SHIFT+V paste won't work.
+
+matches:
+
+  # --- Event IDs: System -------------------------------------------------
+  - trigger: ";;evt"
+    label: "1074  System shutdown/restart (System)"
+    replace: "1074"
+    search_terms: [shutdown, restart, reboot, system]
+  - trigger: ";;evt"
+    label: "6005  Event log service started (System)"
+    replace: "6005"
+    search_terms: [boot, startup, eventlog started, system]
+  - trigger: ";;evt"
+    label: "6006  Event log service stopped (System)"
+    replace: "6006"
+    search_terms: [shutdown, eventlog stopped, system]
+  - trigger: ";;evt"
+    label: "6013  Windows uptime (System)"
+    replace: "6013"
+    search_terms: [uptime, reboot, system]
+  - trigger: ";;evt"
+    label: "7040  Service startup type changed (System)"
+    replace: "7040"
+    search_terms: [service, startup type, tampering, system]
+  - trigger: ";;evt"
+    label: "7045  Service installed (System)"
+    replace: "7045"
+    search_terms: [service installed, persistence, malware, system]
+
+  # --- Event IDs: Defender (Microsoft-Windows-Windows Defender/Operational) --
+  - trigger: ";;evt"
+    label: "1116  Defender malware detected"
+    replace: "1116"
+    search_terms: [defender, antivirus, malware detection]
+  - trigger: ";;evt"
+    label: "1118  Defender remediation started"
+    replace: "1118"
+    search_terms: [defender, antivirus, remediation, quarantine]
+  - trigger: ";;evt"
+    label: "1119  Defender remediation succeeded"
+    replace: "1119"
+    search_terms: [defender, antivirus, remediation success]
+  - trigger: ";;evt"
+    label: "1120  Defender remediation failed"
+    replace: "1120"
+    search_terms: [defender, antivirus, remediation failed]
+  - trigger: ";;evt"
+    label: "5001  Defender real-time protection changed"
+    replace: "5001"
+    search_terms: [defender, antivirus, real-time protection, disabled]
+
+  # --- Event IDs: Security -------------------------------------------------
+  - trigger: ";;evt"
+    label: "1102  Audit log cleared (Security)"
+    replace: "1102"
+    search_terms: [audit log cleared, cover tracks, anti-forensics]
+  - trigger: ";;evt"
+    label: "4624  Successful logon (Security)"
+    replace: "4624"
+    search_terms: [logon, login, success, logon type, logon id]
+  - trigger: ";;evt"
+    label: "4625  Failed logon (Security)"
+    replace: "4625"
+    search_terms: [logon failed, login failed, brute force]
+  - trigger: ";;evt"
+    label: "4648  Logon with explicit credentials (Security)"
+    replace: "4648"
+    search_terms: [explicit credentials, runas, lateral movement]
+  - trigger: ";;evt"
+    label: "4656  Handle to object requested (Security)"
+    replace: "4656"
+    search_terms: [handle, object access, file, registry, process]
+  - trigger: ";;evt"
+    label: "4672  Special privileges assigned to logon (Security)"
+    replace: "4672"
+    search_terms: [special logon, privileges, admin, SeDebugPrivilege]
+  - trigger: ";;evt"
+    label: "4698  Scheduled task created (Security)"
+    replace: "4698"
+    search_terms: [scheduled task created, persistence]
+  - trigger: ";;evt"
+    label: "4700  Scheduled task enabled (Security)"
+    replace: "4700"
+    search_terms: [scheduled task enabled, persistence]
+  - trigger: ";;evt"
+    label: "4701  Scheduled task disabled (Security)"
+    replace: "4701"
+    search_terms: [scheduled task disabled]
+  - trigger: ";;evt"
+    label: "4702  Scheduled task updated (Security)"
+    replace: "4702"
+    search_terms: [scheduled task updated, persistence]
+  - trigger: ";;evt"
+    label: "4719  System audit policy changed (Security)"
+    replace: "4719"
+    search_terms: [audit policy changed, cover tracks]
+  - trigger: ";;evt"
+    label: "4738  User account changed (Security)"
+    replace: "4738"
+    search_terms: [user account changed, account takeover, group membership]
+  - trigger: ";;evt"
+    label: "4771  Kerberos pre-auth failed (Security)"
+    replace: "4771"
+    search_terms: [kerberos, pre-authentication failed, brute force]
+  - trigger: ";;evt"
+    label: "4776  DC credential validation (Security)"
+    replace: "4776"
+    search_terms: [domain controller, ntlm, credential validation, brute force]
+  - trigger: ";;evt"
+    label: "4907  Object auditing settings (SACL) changed (Security)"
+    replace: "4907"
+    search_terms: [sacl, audit settings, object, audit policy]
+  - trigger: ";;evt"
+    label: "5140  Network share accessed (Security)"
+    replace: "5140"
+    search_terms: [network share accessed, smb]
+  - trigger: ";;evt"
+    label: "5142  Network share added (Security)"
+    replace: "5142"
+    search_terms: [network share added, smb, exfiltration]
+  - trigger: ";;evt"
+    label: "5145  Network share access check (Security)"
+    replace: "5145"
+    search_terms: [network share check, smb, enumeration]
+  - trigger: ";;evt"
+    label: "5157  WFP blocked a connection (Security)"
+    replace: "5157"
+    search_terms: [firewall, wfp, blocked connection]
+
+  # --- XML query builders ---------------------------------------------------
+  # Defender events live in "Microsoft-Windows-Windows Defender/Operational".
+
+  # Event IDs, comma separated -> EventID=a or EventID=b
+  - trigger: ";;xq.id"
+    replace: |
+      <QueryList>
+        <Query Id="0">
+          <Select Path="{{form1.log}}">*[System[({{idexpr}})]]</Select>
+        </Query>
+      </QueryList>
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            Log [[log]]
+            Event IDs (comma separated) [[ids]]
+          fields:
+            log: &logfield
+              type: choice
+              default: Security
+              values:
+                - Security
+                - System
+                - Application
+                - Microsoft-Windows-Windows Defender/Operational
+            ids:
+              default: "4624"
+      - name: idexpr
+        type: shell
+        params:
+          cmd: 'printf %s "$ESPANSO_FORM1_IDS" | tr -cd "0-9," | sed -e "s/,,*/,/g; s/^,//; s/,$//; s/,/ or EventID=/g; s/^/EventID=/"'
+
+  # Named EventData field = value (module default: SubjectLogonId=0x3E7)
+  - trigger: ";;xq.data"
+    replace: |
+      <QueryList>
+        <Query Id="0">
+          <Select Path="{{form1.log}}">*[EventData[Data[@Name='{{form1.field}}']='{{form1.value}}']]</Select>
+        </Query>
+      </QueryList>
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            Log [[log]]
+            Field [[field]] = [[value]]
+          fields:
+            log: *logfield
+            field:
+              default: SubjectLogonId
+            value:
+              default: "0x3E7"
+
+  # EventData field = value AND a specific event ID
+  - trigger: ";;xq.dataid"
+    replace: |
+      <QueryList>
+        <Query Id="0">
+          <Select Path="{{form1.log}}">
+            *[EventData[Data[@Name='{{form1.field}}']='{{form1.value}}']]
+            and
+            *[System[(EventID='{{form1.id}}')]]
+          </Select>
+        </Query>
+      </QueryList>
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            Log [[log]]  Event ID [[id]]
+            Field [[field]] = [[value]]
+          fields:
+            log: *logfield
+            id:
+              default: "4624"
+            field:
+              default: SubjectUserName
+            value:
+              default: ""
+
+  # Any EventData field equals value (don't know which field holds it)
+  - trigger: ";;xq.any"
+    replace: |
+      <QueryList>
+        <Query Id="0">
+          <Select Path="{{form1.log}}">*[EventData[Data and (Data='{{form1.value}}')]]</Select>
+        </Query>
+      </QueryList>
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            Log [[log]]
+            Any Data = [[value]]
+          fields:
+            log: *logfield
+            value:
+              default: ""
+
+  # Events from the last N hours (timediff is in ms)
+  - trigger: ";;xq.time"
+    replace: |
+      <QueryList>
+        <Query Id="0">
+          <Select Path="{{form1.log}}">*[System[TimeCreated[timediff(@SystemTime) &lt;= {{ms}}]]]</Select>
+        </Query>
+      </QueryList>
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            Log [[log]]
+            Last N hours [[hours]]
+          fields:
+            log: *logfield
+            hours:
+              default: "24"
+      - name: ms
+        type: shell
+        params:
+          cmd: 'h=$(printf %s "$ESPANSO_FORM1_HOURS" | tr -cd "0-9"); echo $(( ${h:-24} * 3600000 ))'
+
+  # PowerShell equivalent
+  - trigger: ";;xq.ps"
+    replace: "Get-WinEvent -LogName '{{form1.log}}' -FilterXPath \"{{form1.xpath}}\""
+    vars:
+      - name: form1
+        type: form
+        params:
+          layout: |
+            Log [[log]]
+            XPath [[xpath]]
+          fields:
+            log: *logfield
+            xpath:
+              default: "*[System[EventID=4624]]"
+
+  # Syntax cheatsheet
+  - trigger: ";;xq.help"
+    replace: |
+      <!--
+        Event Viewer XPath cheatsheet (subset of XPath 1.0)
+        Where: Filter Current Log / Create Custom View -> XML -> Edit query manually
+        Field names: open an event -> Details -> XML View (<System> and <EventData>)
+
+        By ID:        *[System[(EventID='4624' or EventID='4625')]]
+        By field:     *[EventData[Data[@Name='SubjectUserName']='test9']]
+        Field OR:     *[EventData[Data[@Name='SubjectUserName'] and (Data='test5' or Data='test9')]]
+        Any field:    *[EventData[Data and (Data='test5')]]
+        Combine:      <expr> and *[System[(EventID='4663')]]
+        Last 24h:     *[System[TimeCreated[timediff(@SystemTime) &lt;= 86400000]]]
+        Multi-log:    several <Select Path="..."> in one <Query>
+        Supported:    position(), band(), timediff()
+        NOT supported: contains(), starts-with()
+        Escape < as &lt; inside the query.
+      -->
