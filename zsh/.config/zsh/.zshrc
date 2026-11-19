@@ -201,3 +201,6 @@ eval "$(starship init zsh)"
 
 # bun completions
 [ -s "/home/nux/.local/share/reflex/bun/_bun" ] && source "/home/nux/.local/share/reflex/bun/_bun"
+
+# Machine-local overrides (untracked; see .gitignore)
+[[ -f "${ZDOTDIR:-$HOME}/.zshrc.local" ]] && source "${ZDOTDIR:-$HOME}/.zshrc.local"
