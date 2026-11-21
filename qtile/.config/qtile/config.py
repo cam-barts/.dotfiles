@@ -181,6 +181,7 @@ keys = [
     Key([SUPER], "space", lazy.spawn("rofi -show combi"), desc="Launcher"),
     Key([SUPER], "r", lazy.spawn("rofi -show combi"), desc="Launcher"),
     Key([SUPER], "b", lazy.spawn("rofi_bookmarks.sh"), desc="Bookmarks"),
+    Key([SUPER], "v", lazy.spawn("rofi-clipboard"), desc="Clipboard history"),
     Key([SUPER], "j", lazy.spawn("rofi-journal"), desc="Journal: one line"),
     Key(
         [SUPER, SHIFT],

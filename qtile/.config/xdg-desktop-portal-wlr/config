@@ -1,0 +1,6 @@
+# Screen sharing (xdg-desktop-portal-wlr): pick which monitor to share in rofi.
+# The wlroots portal shares whole outputs only (no single-window sharing).
+[screencast]
+chooser_type=dmenu
+chooser_cmd=rofi -dmenu -p "Share screen" -theme-str 'window { width: 360px; } listview { lines: 4; }'
+max_fps=30

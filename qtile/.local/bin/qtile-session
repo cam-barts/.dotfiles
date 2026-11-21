@@ -17,6 +17,9 @@ export XDG_CURRENT_DESKTOP=qtile:wlroots
 export XDG_SESSION_DESKTOP=qtile
 export XDG_SESSION_TYPE=wayland
 export QT_QPA_PLATFORM="wayland;xcb"
+# Qt apps (polkit agent, KeePassXC) follow the portal's dark color-scheme; without a
+# platform theme they fall back to light Fusion now that Plasma is gone.
+export QT_QPA_PLATFORMTHEME=xdgdesktopportal
 export MOZ_ENABLE_WAYLAND=1
 export ELECTRON_OZONE_PLATFORM_HINT=auto
 export _JAVA_AWT_WM_NONREPARENTING=1

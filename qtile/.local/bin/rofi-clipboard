@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Super+V: pick an entry from clipboard history (cliphist) and copy it back.
+set -euo pipefail
+choice=$(cliphist list | rofi -dmenu -i -p clipboard -display-columns 2) || exit 0
+printf '%s' "$choice" | cliphist decode | wl-copy
