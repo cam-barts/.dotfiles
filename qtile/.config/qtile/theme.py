@@ -4,7 +4,8 @@ Observatory leads (desktop chrome); Night Market supplies the semantic colours
 (urgent / warning / ok / info). Names follow the design docs in SilverBullet:
   - Projects/SilverBullet Observatory Refresh
   - AI Generated/Barbossa/SilverBullet Tooling/Design System Analysis
-mako and swaylock configs mirror these values by hand (they can't import Python).
+mako and swaylock can't import Python, so derived.py renders their configs from these
+tokens whenever qtile loads its config.
 """
 
 # --- Observatory surfaces ---------------------------------------------------
@@ -43,5 +44,12 @@ BORDER = 2
 GAP = 8
 BAR_HEIGHT = 26
 BAR_BG = CANVAS + "e6"  # slightly translucent
+RADIUS = 14  # notification corners
+
+# --- Panels (notifications, lock screen) ------------------------------------
+PANEL_ALPHA = "f2"  # mako background opacity
+SCRIM_ALPHA = "cc"  # swaylock ring fill over the wallpaper
 
 WALLPAPER_DIR = "~/Pictures/Wallpapers"
+WALLPAPER_SMALL = "observatory-aurora-1366x768.png"  # laptop panel (eDP-1)
+WALLPAPER_LARGE = "observatory-aurora-3840x2160.png"  # external monitors

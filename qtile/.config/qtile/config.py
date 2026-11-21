@@ -22,6 +22,7 @@ from libqtile.lazy import lazy
 from libqtile.widget.battery import BatteryState
 from libqtile.widget.wlan import get_status as wlan_status
 
+import derived
 import theme as t
 
 if TYPE_CHECKING:
@@ -349,6 +350,7 @@ def write_keymap(bindings: list[Key]) -> None:
 
 
 write_keymap(keys)
+derived.write_all()  # mako + swaylock configs from theme.py
 
 
 # --- layouts ----------------------------------------------------------------
@@ -398,6 +400,11 @@ widget_defaults = {
 extension_defaults = widget_defaults.copy()
 
 
+def num(text: str) -> str:
+    """Set a number in the mono face (labels stay Space Grotesk), as Pango markup."""
+    return f"<span font_family='{t.MONO}'>{text}</span>"
+
+
 def sep() -> widget.TextBox:
     """Faint middle-dot separator."""
     return widget.TextBox("·", foreground=t.FAINT, padding=2)
@@ -418,7 +425,7 @@ def volume() -> str:
     except (OSError, subprocess.SubprocessError, ValueError, IndexError):
         return "vol ?"
     else:
-        return "muted" if "MUTED" in out else f"vol {vol}%"
+        return "muted" if "MUTED" in out else f"vol {num(f'{vol}%')}"
 
 
 class TriBattery(widget.Battery):
@@ -491,7 +498,9 @@ def make_bar() -> bar.Bar:
             ),
             widget.CurrentLayout(foreground=t.FAINT, mode="text"),
             sep(),
-            widget.WindowName(foreground=t.MUTED, max_chars=80, empty_group_string=""),
+            widget.WindowName(
+                foreground=t.MUTED, max_chars=80, empty_group_string="", format="{name}"
+            ),
             widget.StatusNotifier(icon_size=16, padding=4, icon_theme="breeze-dark"),
             sep(),
             WifiBars(
@@ -516,7 +525,7 @@ def make_bar() -> bar.Bar:
             sep(),
             widget.Backlight(
                 backlight_name="intel_backlight",
-                format="bri {percent:2.0%}",
+                format=f"bri {num('{percent:2.0%}')}",
                 change_command="brightnessctl -q set {0:.0f}%",
                 step=5,
                 min_brightness=1,
