@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# Idle policy for qtile, run as a single swayidle.
+#   qtile-idle normal   lock 5m, screens off 6m, suspend 15m
+#   qtile-idle awake    performance profile: no idle timers, and closing the lid turns
+#                       the panel off instead of suspending (no lock; logind's lid
+#                       action is blocked with an inhibitor until normal mode)
+# Both modes keep lock-before-sleep for any suspend that does happen.
+# The qtile bar switches modes to follow the power profile.
+set -euo pipefail
+
+mode=${1:-normal}
+state="${XDG_RUNTIME_DIR:-/tmp}/qtile-idle.mode"
+pidfile="${XDG_RUNTIME_DIR:-/tmp}/qtile-idle.lidwatch.pid"
+PANEL=eDP-1
+
+# Internal: follow the lid switch, panel off when closed, on when opened.
+if [[ "$mode" == lidwatch ]]; then
+  echo $$ >"$pidfile"
+  lid=(/proc/acpi/button/lid/*/state)
+  prev=""
+  while sleep 1; do
+    read -r _ st <"${lid[0]}"
+    [[ "$st" == "$prev" ]] && continue
+    case "$st" in
+      closed) wlopm --off "$PANEL" || true ;;
+      open)   wlopm --on "$PANEL" || true ;;
+    esac
+    prev=$st
+  done
+fi
+
+# Tracked by pid file, not by matching command lines (which can hit unrelated processes).
+lidwatch_running() { [[ -f "$pidfile" ]] && kill -0 "$(<"$pidfile")" 2>/dev/null; }
+stop_lidwatch() {
+  if lidwatch_running; then kill "$(<"$pidfile")"; fi
+  rm -f "$pidfile"
+}
+
+# Already running in this mode: nothing to do.
+if [[ -f "$state" && "$(<"$state")" == "$mode" ]] && pgrep -u "$USER" -x swayidle >/dev/null; then
+  if [[ "$mode" != awake ]] || lidwatch_running; then
+    exit 0
+  fi
+fi
+
+always=(
+  before-sleep 'swaylock -f'
+  after-resume 'wlopm --on "*"'
+  lock         'swaylock -f'
+)
+
+case "$mode" in
+  normal)
+    timers=(
+      timeout 300 'swaylock -f'
+      timeout 360 'wlopm --off "*"' resume 'wlopm --on "*"'
+      timeout 900 'systemctl suspend'
+    )
+    ;;
+  awake) timers=() ;;
+  *) echo "usage: qtile-idle normal|awake" >&2; exit 2 ;;
+esac
+
+pkill -u "$USER" -x swayidle || true
+# Ending the watcher also ends its systemd-inhibit parent, releasing the lid.
+stop_lidwatch
+
+if [[ "$mode" == awake ]]; then
+  setsid -f systemd-inhibit --what=handle-lid-switch --who=qtile-idle --mode=block \
+    --why="Performance profile: lid turns the screen off instead of suspending" \
+    qtile-idle lidwatch
+else
+  wlopm --on "$PANEL" 2>/dev/null || true  # in case the lid closed while awake
+fi
+
+echo "$mode" >"$state"
+exec swayidle -w "${timers[@]}" "${always[@]}"

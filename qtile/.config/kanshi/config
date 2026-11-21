@@ -1,0 +1,15 @@
+# Display profiles for scrapulance (applied on hotplug by kanshi, started from qtile's
+# autostart). Output names: `wlr-randr` or /sys/class/drm (eDP-1 panel; DP-1,
+# HDMI-A-1, HDMI-A-2 ports). kanshi picks the first profile whose outputs all match.
+
+# Laptop alone.
+profile laptop {
+    output eDP-1 enable mode 1366x768 position 0,0 scale 1
+}
+
+# Any one external monitor: extend to the right of the panel, at its preferred mode.
+# Pin a specific monitor by replacing `*` with its make/model/serial (see `wlr-randr`).
+profile docked {
+    output eDP-1 enable mode 1366x768 position 0,0 scale 1
+    output * enable position 1366,0
+}

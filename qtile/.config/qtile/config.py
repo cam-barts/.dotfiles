@@ -453,6 +453,61 @@ class TriBattery(widget.Battery):
         return text
 
 
+POWER_PROFILES = ("power-saver", "balanced", "performance")
+POWER_LABELS = {
+    "power-saver": ("save", t.GREEN),
+    "balanced": ("bal", t.LABEL),
+    "performance": ("perf", t.AMBER),
+}
+
+
+def current_power_profile() -> str | None:
+    """Return the active power-profiles-daemon profile, or None if unavailable."""
+    try:
+        return subprocess.run(
+            ["powerprofilesctl", "get"],
+            capture_output=True,
+            text=True,
+            timeout=2,
+            check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+_idle_mode: list[str] = [""]  # last mode handed to qtile-idle
+
+
+def sync_idle(profile: str | None) -> None:
+    """Keep the idle policy in step with the profile: awake while on performance."""
+    mode = "awake" if profile == "performance" else "normal"
+    if mode != _idle_mode[0]:
+        # setsid -f detaches swayidle from qtile and returns at once (no zombie).
+        subprocess.run(["setsid", "-f", "qtile-idle", mode], check=False, timeout=2)
+        _idle_mode[0] = mode
+
+
+def power_profile() -> str:
+    """Show the power profile for the bar, coloured by power cost."""
+    cur = current_power_profile()
+    sync_idle(cur)
+    if cur is None:
+        return "pwr ?"
+    label, colour = POWER_LABELS.get(cur, (cur, t.LABEL))
+    return f"pwr <span foreground='{colour}'>{num(label)}</span>"
+
+
+@lazy.function
+def cycle_power_profile(qtile: Qtile, step: int = 1) -> None:
+    """Move to the next (or previous) power profile and refresh the bar."""
+    cur = current_power_profile()
+    if cur not in POWER_PROFILES:
+        return
+    nxt = POWER_PROFILES[(POWER_PROFILES.index(cur) + step) % len(POWER_PROFILES)]
+    subprocess.run(["powerprofilesctl", "set", nxt], check=False, timeout=2)
+    qtile.widgets_map["power"].force_update()
+
+
 WIFI_BARS = "▂▄▆█"
 WIFI_MAX_QUALITY = 70  # iwlib link quality scale
 
@@ -530,6 +585,16 @@ def make_bar() -> bar.Bar:
                 step=5,
                 min_brightness=1,
                 mouse_callbacks={"Button1": lazy.spawn("rofi-level brightness")},
+            ),
+            sep(),
+            widget.GenPollText(
+                func=power_profile,
+                update_interval=10,
+                name="power",
+                mouse_callbacks={
+                    "Button1": cycle_power_profile(),
+                    "Button3": cycle_power_profile(-1),
+                },
             ),
             sep(),
             TriBattery(

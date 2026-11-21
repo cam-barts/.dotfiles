@@ -22,10 +22,8 @@ wl-paste --watch cliphist store &
 wlsunset -S 07:00 -s 20:30 -t 4000 -T 6500 &
 [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/kanshi/config" ] && kanshi &
 
-swayidle -w \
-  timeout 300  'swaylock -f' \
-  timeout 900  'systemctl suspend' \
-  before-sleep 'swaylock -f' \
-  lock         'swaylock -f' &
+# Idle policy (lock 5m, screens off 6m, suspend 15m; see ~/.local/bin/qtile-idle).
+# The bar's power-profile poll switches it to "awake" while on performance.
+qtile-idle normal &
 
 wait
