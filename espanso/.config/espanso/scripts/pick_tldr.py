@@ -3,7 +3,7 @@
 # requires-python = ">=3.12"
 # dependencies = []
 # ///
-"""Fetch short URLs from Kutt (tldr.cam) and print them for Espanso choice.
+r"""Fetch short URLs from Kutt (tldr.cam) and print them for Espanso choice.
 
 Retrieves the API key from Bitwarden, hits the Kutt API, and outputs
 each link as "label\nshort_url" pairs for Espanso's form list or choice.
@@ -17,6 +17,7 @@ import subprocess
 import sys
 from pathlib import Path
 from urllib.error import URLError
+from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 KUTT_PUBLIC = "https://tldr.cam"
@@ -31,6 +32,7 @@ def get_api_key() -> str | None:
         ["uv", "run", str(SCRIPTS_DIR / "bw_get.py"), BW_ITEM_NAME, "--field", "notes"],
         capture_output=True,
         text=True,
+        check=False,
     )
     if result.returncode == 0 and result.stdout.strip():
         return result.stdout.strip()
@@ -47,10 +49,11 @@ def fetch_links(api_key: str) -> list[dict]:
 
     while True:
         url = f"{kutt_url}/api/v2/links?limit={limit}&skip={skip}"
-        req = Request(url, headers={"X-API-KEY": api_key})
+        # KUTT_PUBLIC is a fixed https:// URL, so no file:/custom schemes reach urlopen.
+        req = Request(url, headers={"X-API-KEY": api_key})  # noqa: S310
 
         try:
-            with urlopen(req) as resp:
+            with urlopen(req) as resp:  # noqa: S310
                 data = json.loads(resp.read().decode())
         except URLError as e:
             print(f"API request failed: {e}", file=sys.stderr)
@@ -77,10 +80,8 @@ def format_link(link: dict) -> str:
 
     # Extract domain from target for readability
     try:
-        from urllib.parse import urlparse
-
         domain = urlparse(target).netloc
-    except Exception:
+    except ValueError:
         domain = target[:40]
 
     label_parts = [short]
@@ -93,6 +94,7 @@ def format_link(link: dict) -> str:
 
 
 def main() -> None:
+    """Print every Kutt short link, sorted, one per line."""
     api_key = get_api_key()
     if not api_key:
         print("Could not retrieve Kutt API key from Bitwarden", file=sys.stderr)
@@ -103,7 +105,7 @@ def main() -> None:
         print("No links found", file=sys.stderr)
         sys.exit(1)
 
-    for link in sorted(links, key=lambda l: l.get("link", "")):
+    for link in sorted(links, key=lambda lk: lk.get("link", "")):
         print(format_link(link))
 
 

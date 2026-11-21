@@ -1,0 +1,15 @@
+# qtile config dir: the global ruff config plus a few rules that don't fit here.
+[tool.ruff]
+extend = "~/.config/ruff/pyproject.toml"
+
+[tool.ruff.lint]
+# Restates the global ignores (a child `ignore` replaces the parent list).
+ignore = [
+    "EXE002", "TD002", "TD003", "COM812", "CPY001",
+    "INP001",  # qtile loads config.py from a plain directory, not a package
+    "S603",    # spawning desktop tools is the job of a WM config
+    "S607",    # ...and they're found on PATH by name
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["theme"]

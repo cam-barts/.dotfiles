@@ -28,6 +28,7 @@ def get_bw_session() -> str | None:
             ["bw", "unlock", "--check", "--session", session],
             capture_output=True,
             text=True,
+            check=False,
         )
         if result.returncode == 0:
             return session
@@ -42,6 +43,7 @@ def get_bw_session() -> str | None:
         input=password,
         capture_output=True,
         text=True,
+        check=False,
     )
     if result.returncode != 0:
         print("Failed to unlock vault", file=sys.stderr)
@@ -59,6 +61,7 @@ def _prompt_password() -> str | None:
             ["zenity", "--password", "--title=Bitwarden Unlock"],
             capture_output=True,
             text=True,
+            check=False,
         )
         if result.returncode == 0:
             return result.stdout.strip()
@@ -73,6 +76,7 @@ def _prompt_password() -> str | None:
             ["powershell", "-NoProfile", "-Command", ps_cmd],
             capture_output=True,
             text=True,
+            check=False,
         )
         if result.returncode == 0:
             return result.stdout.strip()
@@ -86,7 +90,7 @@ def bw_get(item_name: str, field: str = "password", session: str = "") -> str | 
     if session:
         cmd.extend(["--session", session])
 
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True, check=False)
     if result.returncode != 0:
         print(f"bw get failed: {result.stderr}", file=sys.stderr)
         return None
@@ -95,7 +99,8 @@ def bw_get(item_name: str, field: str = "password", session: str = "") -> str | 
 
 
 def main() -> None:
-    if len(sys.argv) < 2:
+    """Parse arguments, unlock if needed, and print the requested field."""
+    if len(sys.argv) <= 1:
         print(
             "Usage: bw_get.py <item_name> [--field password|notes|username]",
             file=sys.stderr,

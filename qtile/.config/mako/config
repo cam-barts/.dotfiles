@@ -1,0 +1,26 @@
+# Observatory panel + Night Market urgency edges (tokens: ~/.config/qtile/theme.py)
+font=Space Grotesk 11
+background-color=#1f2335f2
+text-color=#c0caf5
+border-color=#2a2e42
+border-size=2
+border-radius=14
+padding=12,14
+margin=10
+width=360
+max-icon-size=40
+default-timeout=6000
+layer=overlay
+anchor=top-right
+format=<b>%s</b>\n%b
+
+[urgency=low]
+border-color=#28b8db
+text-color=#9aa5ce
+
+[urgency=normal]
+border-color=#ffaa00
+
+[urgency=critical]
+border-color=#ff0d8a
+default-timeout=0

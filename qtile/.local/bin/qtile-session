@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# SDDM entry point for qtile (Wayland). See /usr/local/share/wayland-sessions/qtile-session.desktop.
+#
+# Plasma imports ~/.config/environment.d into its session; a bare compositor doesn't.
+# Ask systemd's own generator for the evaluated environment.d (SSH_AUTH_SOCK, GNUPGHOME,
+# EDITOR, ...) rather than `systemctl --user show-environment`, which can carry stale
+# WAYLAND_DISPLAY/KDE variables from a previous Plasma login.
+gen=/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator
+if [ -x "$gen" ]; then
+  while IFS= read -r line; do
+    [ -n "$line" ] && export "$line"
+  done < <("$gen")
+fi
+
+export PATH="$HOME/.local/bin:$PATH"
+export XDG_CURRENT_DESKTOP=qtile:wlroots
+export XDG_SESSION_DESKTOP=qtile
+export XDG_SESSION_TYPE=wayland
+export QT_QPA_PLATFORM="wayland;xcb"
+export MOZ_ENABLE_WAYLAND=1
+export ELECTRON_OZONE_PLATFORM_HINT=auto
+export _JAVA_AWT_WM_NONREPARENTING=1
+: "${EDITOR:=nvim}"; export EDITOR
+
+exec qtile start -b wayland

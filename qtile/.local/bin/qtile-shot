@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Screenshots for qtile: qtile-shot full | region | geom "X,Y WxH"
+# Saves to ~/Pictures/Screenshots and copies the image to the clipboard.
+set -euo pipefail
+dir="$HOME/Pictures/Screenshots"
+mkdir -p "$dir"
+file="$dir/$(date +%Y-%m-%d_%H-%M-%S).png"
+
+case "${1:-full}" in
+  full)   grim "$file" ;;
+  region) geom=$(slurp) || exit 0; grim -g "$geom" "$file" ;;
+  geom)   grim -g "$2" "$file" ;;
+  *)      echo "usage: qtile-shot full|region|geom 'X,Y WxH'" >&2; exit 2 ;;
+esac
+
+wl-copy --type image/png < "$file"
+notify-send -a screenshot -i "$file" "Screenshot" "${file/#$HOME/\~}"

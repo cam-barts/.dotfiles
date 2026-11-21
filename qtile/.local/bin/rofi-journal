@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Super+j: one-line journal entry to today's SilverBullet daily note via sb-cli.
+entry=$(rofi -dmenu -p journal -theme-str 'listview { enabled: false; }' </dev/null) || exit 0
+[ -n "${entry// }" ] || exit 0
+
+if out=$(sb daily --sign @cam -- "$entry" 2>&1); then
+  notify-send -a journal -i accessories-text-editor "Journal" "$entry"
+else
+  notify-send -a journal -u critical "Journal entry failed" "$out"
+fi

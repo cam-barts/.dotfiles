@@ -6,3 +6,4 @@ tmux/.config/tmux/plugins/
 zsh/.config/zsh/.zcompdump
 tmux/.config/tmux/resurrect/
 zsh/.config/zsh/.zshrc.local
+__pycache__/

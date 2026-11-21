@@ -12,15 +12,17 @@ Output format (one per line):
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 
 def main() -> None:
+    """Print the 100 most recently modified notes, one per line."""
     # Ensure zk can find the notebook
     env = os.environ.copy()
-    env.setdefault("ZK_NOTEBOOK_DIR", os.path.expanduser("~/silverbullet"))
+    env.setdefault("ZK_NOTEBOOK_DIR", str(Path.home() / "silverbullet"))
 
     # Add ~/.local/bin to PATH for zk
-    local_bin = os.path.expanduser("~/.local/bin")
+    local_bin = Path.home() / ".local" / "bin"
     env["PATH"] = f"{local_bin}:{env.get('PATH', '')}"
 
     result = subprocess.run(
@@ -38,6 +40,7 @@ def main() -> None:
         capture_output=True,
         text=True,
         env=env,
+        check=False,
     )
 
     if result.returncode != 0:

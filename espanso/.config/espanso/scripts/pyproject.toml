@@ -1,0 +1,12 @@
+# espanso helper scripts: the global ruff config plus rules that don't fit CLI helpers.
+[tool.ruff]
+extend = "~/.config/ruff/pyproject.toml"
+
+[tool.ruff.lint]
+# Restates the global ignores (a child `ignore` replaces the parent list).
+ignore = [
+    "EXE002", "TD002", "TD003", "COM812", "CPY001",
+    "T201",  # stdout/stderr is how espanso reads these scripts
+    "S603",  # every subprocess call runs a fixed command (bw, zk, uv, zenity)
+    "S607",  # ...found on PATH by name
+]
