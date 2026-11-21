@@ -10,10 +10,11 @@ from __future__ import annotations
 
 import os
 import subprocess
+import time
 from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar
 
-from libqtile import bar, hook, layout, widget
+from libqtile import bar, hook, layout, qtile, widget
 from libqtile.backend.wayland import InputConfig
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
@@ -34,6 +35,12 @@ SHIFT = "shift"
 HERE = Path(__file__).resolve().parent
 TERM = "kitty"
 JOURNAL_CLASS = "floating-journal"
+KEYMAP_FILE = (
+    Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache"))
+    / "qtile"
+    / "keymap.txt"
+)
+KEYMAP_THEME = 'window { width: 720px; } element-text { font: "Monaspace Argon 11"; }'
 
 
 # --- helpers ----------------------------------------------------------------
@@ -181,6 +188,24 @@ keys = [
     Key([SUPER], "f", lazy.window.toggle_floating(), desc="Toggle floating"),
     Key([SUPER], "n", lazy.layout.normalize(), desc="Reset sizes"),
     Key([SUPER], "p", lazy.spawn("wdisplays"), desc="Display settings"),
+    Key(
+        [SUPER],
+        "slash",
+        lazy.spawn(
+            [
+                "rofi",
+                "-dmenu",
+                "-i",
+                "-p",
+                "keys",
+                "-input",
+                str(KEYMAP_FILE),
+                "-theme-str",
+                KEYMAP_THEME,
+            ]
+        ),
+        desc="Show this keymap",
+    ),
     Key([SUPER, CTRL], "r", lazy.reload_config(), desc="Reload config"),
     Key([SUPER, SHIFT], "Delete", lazy.shutdown(), desc="Log out"),
     # --- Super+Ctrl is the window grid
@@ -207,25 +232,43 @@ keys = [
         [],
         "XF86AudioRaiseVolume",
         lazy.spawn("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"),
+        desc="Volume up",
     ),
     Key(
         [],
         "XF86AudioLowerVolume",
         lazy.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
+        desc="Volume down",
     ),
-    Key([], "XF86AudioMute", lazy.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")),
+    Key(
+        [],
+        "XF86AudioMute",
+        lazy.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),
+        desc="Mute",
+    ),
     Key(
         [],
         "XF86AudioMicMute",
         lazy.spawn("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),
+        desc="Mute microphone",
     ),
-    Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl -q set 5%+")),
-    Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl -q -n1 set 5%-")),
-    Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause")),
-    Key([], "XF86AudioNext", lazy.spawn("playerctl next")),
-    Key([], "XF86AudioPrev", lazy.spawn("playerctl previous")),
-    Key([], "XF86Display", lazy.spawn("wdisplays")),
-    Key([], "XF86Search", lazy.spawn("rofi -show combi")),
+    Key(
+        [],
+        "XF86MonBrightnessUp",
+        lazy.spawn("brightnessctl -q set 5%+"),
+        desc="Brightness up",
+    ),
+    Key(
+        [],
+        "XF86MonBrightnessDown",
+        lazy.spawn("brightnessctl -q -n1 set 5%-"),
+        desc="Brightness down",
+    ),
+    Key([], "XF86AudioPlay", lazy.spawn("playerctl play-pause"), desc="Play/pause"),
+    Key([], "XF86AudioNext", lazy.spawn("playerctl next"), desc="Next track"),
+    Key([], "XF86AudioPrev", lazy.spawn("playerctl previous"), desc="Previous track"),
+    Key([], "XF86Display", lazy.spawn("wdisplays"), desc="Display settings"),
+    Key([], "XF86Search", lazy.spawn("rofi -show combi"), desc="Launcher"),
 ]
 
 # Ctrl+Alt+Fn switches VTs on Wayland (the TTY escape hatch).
@@ -258,6 +301,49 @@ mouse = [
     ),
     Click([ALT], "Button2", lazy.window.bring_to_front()),
 ]
+
+
+# --- Super+/ keymap ---------------------------------------------------------
+MOD_NAMES = {SUPER: "Super", CTRL: "Ctrl", ALT: "Alt", SHIFT: "Shift"}
+KEY_NAMES = {
+    "Return": "Enter",
+    "space": "Space",
+    "slash": "/",
+    "Escape": "Esc",
+    "Print": "PrtSc",
+}
+# Bindings generated per group / VT, shown as one summary row each instead.
+COLLAPSED_PREFIXES = ("Group ", "Send to group ", "VT ")
+SUMMARY_ROWS = [
+    ("Super+1-9", "Go to group"),
+    ("Super+Shift+1-9", "Send window to group"),
+    ("Ctrl+Alt+F1-F7", "Switch to VT (text console)"),
+    ("Alt+drag", "Move floating window"),
+    ("Alt+right-drag", "Resize floating window"),
+]
+
+
+def chord(modifiers: list[str], key: str) -> str:
+    """Render a binding as e.g. ``Super+Shift+Enter``."""
+    mods = [MOD_NAMES.get(m, m) for m in MOD_NAMES if m in modifiers]
+    name = KEY_NAMES.get(key, key.removeprefix("XF86"))
+    return "+".join([*mods, name[:1].upper() + name[1:]])
+
+
+def write_keymap(bindings: list[Key]) -> None:
+    """Write the Super+/ cheat sheet, generated from the live key list."""
+    rows = [
+        (chord(k.modifiers, k.key), k.desc)
+        for k in bindings
+        if k.desc and not k.desc.startswith(COLLAPSED_PREFIXES)
+    ]
+    rows += SUMMARY_ROWS
+    width = max(len(c) for c, _ in rows)
+    KEYMAP_FILE.parent.mkdir(parents=True, exist_ok=True)
+    KEYMAP_FILE.write_text("".join(f"{c:<{width}}  {d}\n" for c, d in rows))
+
+
+write_keymap(keys)
 
 
 # --- layouts ----------------------------------------------------------------
@@ -376,7 +462,7 @@ def make_bar() -> bar.Bar:
             widget.CurrentLayout(foreground=t.FAINT, mode="text"),
             sep(),
             widget.WindowName(foreground=t.MUTED, max_chars=80, empty_group_string=""),
-            widget.StatusNotifier(icon_size=16, padding=4),
+            widget.StatusNotifier(icon_size=16, padding=4, icon_theme="breeze-dark"),
             sep(),
             widget.Wlan(
                 interface="wlp1s0",
@@ -448,6 +534,36 @@ focus_on_window_activation = "smart"
 reconfigure_screens = True
 auto_minimize = True
 wmname = "qtile"
+
+
+# Apps that remember their last state (kitty, browsers) reopen maximized, which
+# qtile treats as a full-screen float, so each new window stacks invisibly on top
+# of the last. Their maximize request arrives just after the window is managed,
+# so remember new windows briefly and tile any that turn maximized in that time.
+# Maximizing later (Super+Ctrl+s, a title-bar double-click) still works.
+RESTORE_GRACE_S = 3.0
+_new_windows: dict[int, float] = {}
+
+
+@hook.subscribe.client_managed
+def _track_new_window(win: Window) -> None:
+    """Note when a window appeared; tile it if it's already maximized."""
+    _new_windows[win.wid] = time.monotonic()
+    if win.maximized:
+        win.disable_floating()
+
+
+@hook.subscribe.float_change
+def _tile_restored_maximized() -> None:
+    """Tile windows that went maximized within the grace period after opening."""
+    now = time.monotonic()
+    for wid, opened in list(_new_windows.items()):
+        win = qtile.windows_map.get(wid)
+        if win is None or now - opened > RESTORE_GRACE_S:
+            del _new_windows[wid]
+        elif getattr(win, "maximized", False):
+            del _new_windows[wid]
+            win.disable_floating()
 
 
 @hook.subscribe.startup_once
