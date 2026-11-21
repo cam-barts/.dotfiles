@@ -1,6 +1,6 @@
 """qtile (Wayland) config for scrapulance.
 
-Keymap (see SilverBullet: Inbox/Revisit QTile With Claude Access -> Keymap):
+Keymap (see SilverBullet: Projects/Revisit QTile With Claude Access -> Keymap):
   Alt         directional navigation (hjkl), cycle/close/fullscreen, mouse
   Super       launchers, groups, session; Super+l = lock
   Super+Ctrl  window grid on the left-hand 3x3 block (q w e / a s d / z x c)
