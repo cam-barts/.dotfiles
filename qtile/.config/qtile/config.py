@@ -8,6 +8,7 @@ Keymap (see SilverBullet: Inbox/Revisit QTile With Claude Access -> Keymap):
 
 from __future__ import annotations
 
+import math
 import os
 import subprocess
 import time
@@ -19,6 +20,7 @@ from libqtile.backend.wayland import InputConfig
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 from libqtile.widget.battery import BatteryState
+from libqtile.widget.wlan import get_status as wlan_status
 
 import theme as t
 
@@ -35,6 +37,8 @@ SHIFT = "shift"
 HERE = Path(__file__).resolve().parent
 TERM = "kitty"
 JOURNAL_CLASS = "floating-journal"
+VOL_UP = "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"
+VOL_DOWN = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
 KEYMAP_FILE = (
     Path(os.environ.get("XDG_CACHE_HOME", Path.home() / ".cache"))
     / "qtile"
@@ -174,6 +178,7 @@ keys = [
     Key([SUPER], "Return", raise_or_launch_term(), desc="Raise or launch kitty"),
     Key([SUPER, SHIFT], "Return", lazy.spawn(TERM), desc="New kitty"),
     Key([SUPER], "space", lazy.spawn("rofi -show combi"), desc="Launcher"),
+    Key([SUPER], "r", lazy.spawn("rofi -show combi"), desc="Launcher"),
     Key([SUPER], "b", lazy.spawn("rofi_bookmarks.sh"), desc="Bookmarks"),
     Key([SUPER], "j", lazy.spawn("rofi-journal"), desc="Journal: one line"),
     Key(
@@ -231,13 +236,13 @@ keys = [
     Key(
         [],
         "XF86AudioRaiseVolume",
-        lazy.spawn("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"),
+        lazy.spawn(VOL_UP),
         desc="Volume up",
     ),
     Key(
         [],
         "XF86AudioLowerVolume",
-        lazy.spawn("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
+        lazy.spawn(VOL_DOWN),
         desc="Volume down",
     ),
     Key(
@@ -277,7 +282,7 @@ keys.extend(
     for vt in range(1, 8)
 )
 
-groups = [Group(str(i)) for i in range(1, 10)]
+groups = [Group(str(i)) for i in range(1, 4)]
 for g in groups:
     keys += [
         Key([SUPER], g.name, lazy.group[g.name].toscreen(), desc=f"Group {g.name}"),
@@ -315,8 +320,8 @@ KEY_NAMES = {
 # Bindings generated per group / VT, shown as one summary row each instead.
 COLLAPSED_PREFIXES = ("Group ", "Send to group ", "VT ")
 SUMMARY_ROWS = [
-    ("Super+1-9", "Go to group"),
-    ("Super+Shift+1-9", "Send window to group"),
+    ("Super+1-3", "Go to group"),
+    ("Super+Shift+1-3", "Send window to group"),
     ("Ctrl+Alt+F1-F7", "Switch to VT (text console)"),
     ("Alt+drag", "Move floating window"),
     ("Alt+right-drag", "Resize floating window"),
@@ -441,6 +446,31 @@ class TriBattery(widget.Battery):
         return text
 
 
+WIFI_BARS = "▂▄▆█"
+WIFI_MAX_QUALITY = 70  # iwlib link quality scale
+
+
+def signal_bars(fraction: float) -> str:
+    """Render 0..1 signal as four bars, unfilled ones faint (Pango markup)."""
+    filled = min(len(WIFI_BARS), max(1, math.ceil(fraction * len(WIFI_BARS))))
+    lit, dim = WIFI_BARS[:filled], WIFI_BARS[filled:]
+    return lit + (f'<span foreground="{t.FAINT}">{dim}</span>' if dim else "")
+
+
+class WifiBars(widget.Wlan):
+    """Wi-Fi signal strength as bars instead of the network name."""
+
+    def poll(self) -> str:
+        """Return the bars, or the disconnected message."""
+        try:
+            essid, quality = wlan_status(self.interface)
+        except OSError:
+            return self.disconnected_message
+        if essid is None:
+            return self.disconnected_message
+        return signal_bars((quality or 0) / WIFI_MAX_QUALITY)
+
+
 def make_bar() -> bar.Bar:
     """Build the top bar."""
     return bar.Bar(
@@ -464,20 +494,33 @@ def make_bar() -> bar.Bar:
             widget.WindowName(foreground=t.MUTED, max_chars=80, empty_group_string=""),
             widget.StatusNotifier(icon_size=16, padding=4, icon_theme="breeze-dark"),
             sep(),
-            widget.Wlan(
+            WifiBars(
                 interface="wlp1s0",
-                format="{essid}",
+                font=t.MONO,
                 disconnected_message="offline",
                 foreground=t.CYAN,
                 update_interval=5,
             ),
             sep(),
-            widget.GenPollText(func=volume, update_interval=1, name="vol"),
+            widget.GenPollText(
+                func=volume,
+                update_interval=1,
+                name="vol",
+                mouse_callbacks={
+                    "Button1": lazy.spawn("rofi-level volume"),
+                    "Button3": lazy.spawn("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),
+                    "Button4": lazy.spawn(VOL_UP),
+                    "Button5": lazy.spawn(VOL_DOWN),
+                },
+            ),
             sep(),
             widget.Backlight(
                 backlight_name="intel_backlight",
                 format="bri {percent:2.0%}",
-                change_command=None,
+                change_command="brightnessctl -q set {0:.0f}%",
+                step=5,
+                min_brightness=1,
+                mouse_callbacks={"Button1": lazy.spawn("rofi-level brightness")},
             ),
             sep(),
             TriBattery(
@@ -518,7 +561,7 @@ wl_input_rules = {
     ),
     "type:keyboard": InputConfig(kb_repeat_rate=30, kb_repeat_delay=300),
 }
-wl_xcursor_theme = None
+wl_xcursor_theme = "breeze_cursors"
 wl_xcursor_size = 24
 
 

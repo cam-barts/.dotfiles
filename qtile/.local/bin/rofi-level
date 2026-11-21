@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Pick a volume or brightness level in rofi (bar click). Type any 0-100 value too.
+# Usage: rofi-level volume|brightness
+set -euo pipefail
+
+case "${1:-}" in
+  volume)
+    current=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{printf "%d%%%s", $2 * 100 + 0.5, ($3 ? " muted" : "")}')
+    extra="mute"
+    ;;
+  brightness)
+    current=$(brightnessctl -m | awk -F, '{print $4}')
+    extra=""
+    ;;
+  *) echo "usage: rofi-level volume|brightness" >&2; exit 2 ;;
+esac
+
+choice=$(printf '%s\n' 100 75 50 25 10 $extra |
+  rofi -dmenu -p "$1 ($current)" -theme-str 'window { width: 320px; } listview { lines: 6; }') || exit 0
+choice=${choice%\%}
+
+if [[ "$choice" == mute ]]; then
+  wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+elif [[ "$choice" =~ ^[0-9]+$ ]] && (( choice <= 100 )); then
+  if [[ "$1" == volume ]]; then
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
+    wpctl set-volume @DEFAULT_AUDIO_SINK@ "${choice}%"
+  else
+    brightnessctl -q set "$(( choice < 1 ? 1 : choice ))%"  # never fully black
+  fi
+else
+  notify-send -a "$1" "Not a level: $choice" "Enter a number from 0 to 100"
+fi
